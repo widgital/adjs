@@ -2,11 +2,14 @@ cookies = require 'cookies-js'
 uuid = require 'node-uuid'
 Base = require './base'
 utils = require './utils'
+
 module.exports = do ->
 
   COOKIE_KEY = "_ajsk"
   now = utils.now()
+
   #  u1 = id|ts|p|a|av|ae|ac|v|vts|vts0|vp|va|vav|vae|vac
+
 
   #  id = user id
   #  ts = timestamp when id created
@@ -23,22 +26,6 @@ module.exports = do ->
   #  vav = total number of ads viewed
   #  vae = number of ads viewed w/ engagement
   #  vac = number of total ads clicked
-  #
-  #  id = user id
-  #ts = timestamp when id created
-  #p = total number of page views
-  #a = total number of ads requested
-  #av = total number of ads viewed
-  #ae = number of ads viewed w/ engagement
-  #ac = number of total ads clicked
-  #v = number of total visits (new visit when 30 min of inactivity)
-  #vts = timestamp when visit created
-  #vts0 = timestamp when previous visit created
-  #vp = total number of page views
-  #va = total number of ads requested
-  #vav = total number of ads viewed
-  #vae = number of ads viewed w/ engagement
-  #vac = number of total ads clicked
 
   updateVisitId = (options)->
     nowTime = utils.now()/1000
@@ -100,9 +87,11 @@ module.exports = do ->
       query = utils.toQuery(@attributes)
       cookies.set(COOKIE_KEY,query, { expires: 31536000  }) #one year
       query
+
     set:(attrs,options={})->
       super(attrs,options)
       @serializeCookie()
+
     incr:(key,options)->
       @attributes[key] ||=0
       updatedVals = {}

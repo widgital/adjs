@@ -11,6 +11,7 @@ do (window)->
 
   # Notify of new page, set the page ID
   stream.page session
+
   safeframeUrl = config.cdn_url
 #  if process.env.ENV == "production"
 #    safeframeUrl = process.env.CDN_URL
