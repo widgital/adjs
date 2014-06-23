@@ -39,5 +39,5 @@ module.exports = do ()->
     else if !pendingRequests[request.id] or isAttempt
       pendingRequests[request.id]
       setTimeout( =>
-        event(request,cb,true)
+        @event(request,cb,true)
       ,500)
