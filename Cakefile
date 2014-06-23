@@ -29,7 +29,7 @@ task 'watchify', 'watch /debug files',->
       print data.toString()
 task 'build', 'build different files',->
   watchifyProcs = []
-  watchifyProcs.push(spawn 'browserify', [ 'lib/frame.js', '-o', 'lib/dist/frame.ad.js'])
+  watchifyProcs.push(spawn 'browserify', [ 'lib/frame.js', '-o', 'lib/dist/frame.ad.js','-t','envify'])
   watchifyProcs.push(spawn 'browserify', [ 'lib/publisher.js' ,'-o' ,'lib/dist/publisher.ad.js','-t','envify'])
   watchifyProcs.push(spawn 'browserify', [ 'lib/advertiser.js', '-o', 'lib/dist/advertiser.ad.js'])
   for p in watchifyProcs

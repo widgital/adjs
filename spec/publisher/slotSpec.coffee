@@ -90,7 +90,7 @@ describe 'Slot',->
       ).refresh()
 
 
-  describe '#trigger',->
+#  describe '#trigger',->
 #    slot = null
 #    beforeEach ->
 #      slot = Slot("testslot")
@@ -99,38 +99,38 @@ describe 'Slot',->
 #        f: ->
 #      slot.on("crap")
 
-    it 'should trigger the event if set globally',->
-  describe '#handleMessage',->
-    it 'should fire correct events for message',->
-  describe '#initEvents',->
-    it 'should initialize default events',->
-  describe '#notifyFrame',->
-  describe '#create',->
-    it "should create",->
-  describe '#remove',->
-    it "should remove the slot",->
-  describe '#destroy',->
-    it "should destroy the ad",->
-  describe '#reload',->
-    it "should reload the ad",->
-  describe '#currentlyInview',->
-    it "should be inview of > 50 % and viewed"
-    it "should be out of view of not viewed"
-    it "should be out of view if inview percentage < 50"
-  describe '#inviewPercentage',->
-    it "should return the inview percentage"
-  describe '.destroy',->
-    it "should destroy all ads",->
-  describe '.create',->
-    it "should create a slot based on div",->
-  describe '.events',->
-    it "should generate events",->
-    it "should fire an event globally for every instance event",->
-  describe "events",->
-    describe "#load",->
-      it "should fire when no nested iframes",->
-
-      it 'should fire when nested iframes are loaded',->
+#    it 'should trigger the event if set globally',->
+#  describe '#handleMessage',->
+#    it 'should fire correct events for message',->
+#  describe '#initEvents',->
+#    it 'should initialize default events',->
+#  describe '#notifyFrame',->
+#  describe '#create',->
+#    it "should create",->
+#  describe '#remove',->
+#    it "should remove the slot",->
+#  describe '#destroy',->
+#    it "should destroy the ad",->
+#  describe '#reload',->
+#    it "should reload the ad",->
+#  describe '#currentlyInview',->
+#    it "should be inview of > 50 % and viewed"
+#    it "should be out of view of not viewed"
+#    it "should be out of view if inview percentage < 50"
+#  describe '#inviewPercentage',->
+#    it "should return the inview percentage"
+#  describe '.destroy',->
+#    it "should destroy all ads",->
+#  describe '.create',->
+#    it "should create a slot based on div",->
+#  describe '.events',->
+#    it "should generate events",->
+#    it "should fire an event globally for every instance event",->
+#  describe "events",->
+#    describe "#load",->
+#      it "should fire when no nested iframes",->
+#
+#      it 'should fire when nested iframes are loaded',->
 
 
 
