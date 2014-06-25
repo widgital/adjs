@@ -53,7 +53,45 @@ module.exports = do ($sf,window)->
       count += countFrames(frame) unless  frame == win
     count
 
-  capitalizeString  = (string)->
+  getReferrer = (win)->
+
+
+    # get referrer from query string
+    qs = object.fromQuerystring("referrer", window.location.href) or object.fromQuerystring("referer", window.location.href)
+    return qs if qs
+
+    # try to get the top referer - otherwise, move up the stack until we get something
+    try
+      referrer = window.top.document.referrer
+    catch e
+      w = window.parent
+      do
+        if w
+        try
+          referrer = w.document.referrer
+        catch e2
+          referrer = ''
+
+    referrer = document.referrer if referrer is ''
+    referrer
+
+
+#
+#	 * Cross-browser helper function to add event handler
+#
+object.addEventListener = (element, eventType, eventHandler, useCapture) ->
+  if element.addEventListener
+    element.addEventListener eventType, eventHandler, useCapture
+    return true
+  return element.attachEvent("on" + eventType, eventHandler)  if element.attachEvent
+  element["on" + eventType] = eventHandler
+  return
+
+
+
+
+
+capitalizeString  = (string)->
     string.charAt(0).toUpperCase() + string.slice(1);
 
   sendRequest: sendRequest

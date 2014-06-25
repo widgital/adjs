@@ -2,6 +2,7 @@ cookies = require 'cookies-js'
 uuid = require 'node-uuid'
 Base = require './base'
 utils = require './utils'
+config = require './config'
 
 module.exports = do ->
 
@@ -100,7 +101,7 @@ module.exports = do ->
       if @attributes[vkey]?
         updatedVals[vkey] =  utils.toNumber(@attributes[vkey])+1
       @set(updatedVals,options)
-  Session.VISITOR_EXPIRY = 20 #20 seconds...
+  Session.VISITOR_EXPIRY = config.visit_expiry #20 seconds...
 
   if _TEST? and _TEST
     Session._updateVisitId = updateVisitId
