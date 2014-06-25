@@ -22,6 +22,15 @@ module.exports = do ()->
     error = (err)->
       console.log "ERROR:" + err
 
+    # map the keys used in cookies to more descriptive keys that are used by the api
+    subst = {id: 'page_id',vid:'vis_id',p:'site_page_vw'}
+    obj = {};
+    obj[subst[k]] = v for k, v of session.attributes when subst[k]
+    #obj = session.attributes
+    console.log(JSON.stringify(obj, null, '\t'))
+    console.log(JSON.stringify(session.attributes, null, '\t'))
+
+    # send page request to the API
     send prefix + '/page', session.attributes, success, error
 
   event: (request,cb,isAttempt)->
