@@ -1,7 +1,7 @@
 window.reqwest or= require 'reqwest'
 window.JSON or= require 'json'
 
-module.exports = do ($sf,window)->
+module.exports = do ()->
 
   reqwest = window.reqwest
 
@@ -52,46 +52,79 @@ module.exports = do ($sf,window)->
     for frame in win.frames
       count += countFrames(frame) unless  frame == win
     count
+  getFramePosition = (win)->
+    count = 0
+    count = 1 + getFramePosition(win.parent) if win.parent != win.top
+    count
 
-  getReferrer = (win)->
+  # taken from underscore
+  nativeReduce = Array::reduce
+  reduceError = 'Reduce of empty array with no initial value';
+  reduce = (obj, iterator, memo, context) ->
+    initial = arguments.length > 2
+    obj = []  unless obj?
+    if nativeReduce and obj.reduce is nativeReduce
+      iterator = _.bind(iterator, context)  if context
+      return (if initial then obj.reduce(iterator, memo) else obj.reduce(iterator))
+    for value,index in obj
+      do (value, index, obj) ->
+        unless initial
+          memo = value
+          initial = true
+        else
+          memo = iterator.call(context, memo, value, index, obj)
+        return
+
+    throw new TypeError(reduceError)  unless initial
+    memo
+
+  keys = (obj)->
+    $sf?.lib.lang.keys(obj)
 
 
-    # get referrer from query string
-    qs = object.fromQuerystring("referrer", window.location.href) or object.fromQuerystring("referer", window.location.href)
-    return qs if qs
+#  getReferrer = (win,referrer=null)
+#    if win == window.top
+#
 
-    # try to get the top referer - otherwise, move up the stack until we get something
-    try
-      referrer = window.top.document.referrer
-    catch e
-      w = window.parent
-      do
-        if w
-        try
-          referrer = w.document.referrer
-        catch e2
-          referrer = ''
-
-    referrer = document.referrer if referrer is ''
-    referrer
+#  getReferrer = (win)->
+#
+#
+#    # get referrer from query string
+#    qs = object.fromQuerystring("referrer", window.location.href) or object.fromQuerystring("referer", window.location.href)
+#    return qs if qs
+#
+#    # try to get the top referer - otherwise, move up the stack until we get something
+#    try
+#      referrer = window.top.document.referrer
+#    catch e
+#      w = window.parent
+#      do
+#        if w
+#        try
+#          referrer = w.document.referrer
+#        catch e2
+#          referrer = ''
+#
+#    referrer = document.referrer if referrer is ''
+#    referrer
 
 
 #
 #	 * Cross-browser helper function to add event handler
-#
-object.addEventListener = (element, eventType, eventHandler, useCapture) ->
-  if element.addEventListener
-    element.addEventListener eventType, eventHandler, useCapture
-    return true
-  return element.attachEvent("on" + eventType, eventHandler)  if element.attachEvent
-  element["on" + eventType] = eventHandler
-  return
+##
+#object.addEventListener = (element, eventType, eventHandler, useCapture) ->
+#  if element.addEventListener
+#    element.addEventListener eventType, eventHandler, useCapture
+#    return true
+#  return element.attachEvent("on" + eventType, eventHandler)  if element.attachEvent
+#  element["on" + eventType] = eventHandler
+#  return
 
 
 
 
 
-capitalizeString  = (string)->
+  capitalizeString  = (string)->
     string.charAt(0).toUpperCase() + string.slice(1);
 
   sendRequest: sendRequest
@@ -102,3 +135,6 @@ capitalizeString  = (string)->
   defineProperty: defineProperty
   countFrames: countFrames
   capitalizeString: capitalizeString
+  keys: keys
+  getFramePosition: getFramePosition
+  reduce: reduce

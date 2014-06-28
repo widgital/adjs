@@ -7,7 +7,6 @@ cookies = require 'cookies-js'
 
 describe 'Session',->
   beforeEach ()->
-    window._TEST = true;
     Session.clearCookie()
   afterEach ()->
     Session.clearCookie()

@@ -5,6 +5,19 @@ module.exports = do ()->
   prefix = config.api
   pendingRequests = {}
   sendingRequests = {}
+  mapping =
+    id: "user_id"
+    p: "site_page_vw"
+    a: "site_ad_req"
+    av: "site_ad_vw"
+    ac: "site_ad_clk"
+    ae: "site_ad_vw_eng"
+    v: "site_vis"
+    vp: "vis_page_vw"
+    va: "vis_ad_req"
+    vav: "vis_ad_vw"
+    vae: "vis_ad_vw_eng"
+    vac: "vis_ad_clk"
 
   send = (url, data, success, error)->
     reqwest
@@ -17,20 +30,15 @@ module.exports = do ()->
   page: (session)->
 
     success = (resp)->
-      session.set(resp,silent:true)
+      session.set(resp)
 
     error = (err)->
       console.log "ERROR:" + err
 
     # map the keys used in cookies to more descriptive keys that are used by the api
-    subst = {id: 'page_id',vid:'vis_id',p:'site_page_vw'}
-    obj = {};
-    obj[subst[k]] = v for k, v of session.attributes when subst[k]
-    #obj = session.attributes
-    console.log(JSON.stringify(obj, null, '\t'))
-    console.log(JSON.stringify(session.attributes, null, '\t'))
-
-    # send page request to the API
+#    subst = {}
+#    obj = {};
+#    obj[subst[k]] = v for k, v of session.attributes when subst[k]
     send prefix + '/page', session.attributes, success, error
 
   event: (request,cb,isAttempt)->
@@ -44,9 +52,12 @@ module.exports = do ()->
     if !sendingRequests[request.id]
       delete pendingRequests[request.id]
       sendingRequests[request.id] = true
-      send prefix + '/event', request.attributes, success, error
+      params = {}
+      params[mapping[k] or k] = v for k,v of request.attributes
+      send prefix + '/event', params, success, error
     else if !pendingRequests[request.id] or isAttempt
       pendingRequests[request.id]
       setTimeout( =>
         @event(request,cb,true)
       ,500)
+

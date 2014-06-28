@@ -67,6 +67,8 @@ module.exports = do ->
     vav: 0
     vae: 0
     vac: 0
+  persistentFields = ()->
+    defaultAttributes()
   class Session extends Base
     constructor:(query)->
       super()
@@ -103,7 +105,7 @@ module.exports = do ->
       @set(updatedVals,options)
   Session.VISITOR_EXPIRY = config.visit_expiry #20 seconds...
 
-  if _TEST? and _TEST
+  if process.env.ENV == "test" or (_TEST? and _TEST)
     Session._updateVisitId = updateVisitId
     Session._parseCookie = parseCookie
     Session._getUser = getUserId

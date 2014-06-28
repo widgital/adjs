@@ -5,17 +5,33 @@ events = require('./shared/event')(["request","load","view","click","expanded","
 utils = require './shared/utils'
 Request = require './request'
 stream = require './shared/stream'
+config = require './shared/config'
 
 do (sf,window)->
 
   # initialize request
   request = new Request()
+  request.set
+    load_pos:utils.getFramePosition(window)
+    v_js:config.version
+    req_url_blind: true #todo this will not always be true
+    tz:(new Date()).getTimezoneOffset()
+
+
+
 
   request.change ->
     stream.event request
+  stream.event request
 
   sfDom = sf.lib.dom
   AdJS = {}
+  utils.defineProperty AdJS,"isController",
+    writable:false
+    value:false
+    configurable:false
+
+
   VIEWED_STRIKE = 9
   viewedTicks = 0
   unviewedTicks = 0
@@ -24,6 +40,9 @@ do (sf,window)->
   registered = false
   didShow = false
   requested =false
+  startTicks = utils.now()
+  maxViewPercentage = 0
+  viewedPercentages = []
 
   attributes = {}
 
@@ -64,12 +83,15 @@ do (sf,window)->
   isViewedInterval =null
 
   updateIsViewed = ->
-    if !AdJS.isViewed && $sf.ext.inViewPercentage?() > 50 && $sf.ext.winHasFocus()
+    viewPercent = $sf.ext.inViewPercentage?() or 0
+    if !AdJS.isViewed && viewPercent > 50 && $sf.ext.winHasFocus()
       viewedTicks++
-    else if AdJS.isViewed &&  ($sf.ext.inViewPercentage?() < 50 || !$sf.ext.winHasFocus())
+      viewedPercentages.push(viewPercent)
+    else if AdJS.isViewed &&  (viewPercent < 50 || !$sf.ext.winHasFocus())
       unviewedTicks++
     else
       unviewedTicks = viewedTicks = 0
+      viewedPercentages = []
     if viewedTicks == VIEWED_STRIKE
       AdJS.view() unless AdJS.isViewed
       AdJS.isViewed=true
@@ -77,7 +99,7 @@ do (sf,window)->
       AdJS.unview() unless AdJS.isunViewed
       AdJS.isunViewed = true
       clearInterval(isViewedInterval)
-
+    maxViewPercentage = viewPercent if viewPercent > maxViewPercentage
   showAdTimer = null
 
   showAd = (show)->
@@ -136,14 +158,31 @@ do (sf,window)->
     isViewedInterval = setInterval(updateIsViewed,100)
 
   AdJS.load ->
-    AdJS.frameCount = utils.countFrames(window)
-    request.set(frame_count:AdJS.frameCount)
+    AdJS.loadChain = utils.countFrames(window)
+    request.set(load_chain:AdJS.loadChain)
 
   AdJS.request ->
     AdJS.requestTime = utils.now()
+    geoInfo = $sf.ext.geom()
     request.set
       requested:true
       requestedAt:utils.now()
+      req_t:utils.now() - startTicks
+      req_view_pct: $sf.ext.inViewPercentage?()
+      slot_x: geoInfo.self.l
+      slot_y: geoInfo.self.t
+      slot_w:geoInfo.self.w
+      slot_h:geoInfo.self.h
+      screen_w:window.screen.width
+      screen_h:window.screen.height
+      vp_x:geoInfo.win.l
+      vp_y:geoInfo.win.t
+      vp_w:geoInfo.win.w
+      vp_h:geoInfo.win.h
+
+
+
+
 
   AdJS.load ->
     AdJS.loadTime = utils.now()
@@ -152,17 +191,30 @@ do (sf,window)->
     request.set
       loaded:true
       loadedAt:utils.now()
+      load_t:utils.now() - startTicks
+
+
 
   AdJS.view ->
     AdJS.viewTime = utils.now()
     request.set
       viewed:true
       viewedAt:utils.now()
+      view_t: utils.now() - startTicks
+      view_meas:true #todo change this to start of request - although alls hould be measurable with js
+      view_pct: utils.reduce(viewedPercentages,((memo,num)-> memo + num),0)/viewedPercentages.length
+      view_pct_max: maxViewPercentage
+
+
+
+
+
 
   AdJS.engage ->
     AdJS.engageTime = utils.now()
     request.set
       engaged:true
+      view_eng:true
       engagedAt:utils.now()
 
   AdJS.click ->
@@ -170,18 +222,22 @@ do (sf,window)->
     request.set
       clicked:true
       clickedAt:utils.now()
+      clk_t: utils.now() - startTicks
 
   AdJS.unview ->
     AdJS.unviewTime = utils.now()
     request.set
       unviewed:true
       unviewedAt:utils.now()
+      view_dur: utils.now() - AdJS.viewedAt
+      view_pct_max: maxViewPercentage
 
   AdJS.unload ->
     AdJS.unloadTime = utils.now()
     request.set
       unloaded:true
       unloadedAt:utils.now()
+      unl_t: utils.now() - startTicks
 
   sf.ext.render(false)
   didShow = not sf.lib.lang.cbool(sf.ext.meta("inview","extended"))
@@ -193,10 +249,10 @@ do (sf,window)->
   setSessionInfo sf.ext.meta("session","extended"),silent:true
   sf.ext.deleteMeta("session","extended")
   $ad.slotId = sf.ext.meta("slot_id","extended")
-  $ad.count =  sf.ext.meta("slot_count","extended")
+  $ad.count =  sf.ext.meta("load_n","extended")
   request.set
     slot_id:  sf.ext.meta("slot_id","extended")
-    slot_count: sf.ext.meta("slot_count","extended"),
+    load_n: sf.ext.meta("load_n","extended"),
     page_url: location
     page_host: host
     {silent:true}

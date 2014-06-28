@@ -4,11 +4,16 @@ Session = require './shared/session'
 AdJS = require './publisher/slot'
 stream = require './shared/stream'
 config = require './shared/config'
+utils  =require './shared/utils'
 
 do (window)->
   # initialize session
   session = new Session()
   session.incr("p")
+  startTicks = utils.now()
+  pageLoadMs = 0
+  pageDuration = 0
+
 
   # Notify of new page, set the page ID
   stream.page session
@@ -20,14 +25,18 @@ do (window)->
 #  else
 #    safeframeUrl = "../lib/html/adjsframe.html"
   sfDom =  $sf.lib.dom
+  sfDom.attach "beforeunload",->
+    pageDuration =  utils.now()-startTicks
+    true
   globalConfig =
     keys:[]
     safeframe_url: safeframeUrl
 
-  doRender = ()->
+  doRender = (cb)->
     sfPositions  = {}
     if !sfDom.ready()
       sfDom.wait ->
+        pageLoadMs = (utils.now() - startTicks)
         doRender.apply null, args
         args = null
       return
@@ -36,6 +45,7 @@ do (window)->
       for d in divs when sfDom.attr(d,"data-adjs")
         do (d)->
           AdJS.create(d,session)
+      cb?()
 
   initSafeFrame =  ->
     $sf.host.Config
@@ -61,12 +71,13 @@ do (window)->
     console.log("loaded")
 
   session.change ->
-    console.log "wtf"
     for _,ad of AdJS.slots
       ad.notifyFrame("cookie-update",session.serializeCookie())
 
-  AdJS.render = ()->
+  AdJS.render = (cb)->
     adJsScript = (s for s in document.getElementsByTagName("script") when sfDom.attr(s,"data-adjs"))[0]
+    clientId = sfDom.attr(adJsScript,"data-client-id")
+    session.set("client_id",clientId)
     initSafeFrame()
     doRender()
   #session events

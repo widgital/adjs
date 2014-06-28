@@ -42,7 +42,7 @@ module.exports = do ->
     refresh:(cb)->
       @remove()
       @count++
-      @posMeta.setValue("slot_count","extended",@count)
+      @posMeta.setValue("load_n","extended",@count)
       sf.host.render(@pos)
       @frame = document.getElementById(@posConfig.dest)
       cb?(@)
@@ -73,7 +73,7 @@ module.exports = do ->
       @request ->
         @requestTime = utils.now()
       @load ->
-        @frameCount = utils.countFrames(@frame.contentWindow)
+        @loadChain = utils.countFrames(@frame.contentWindow)
         @loadTime = utils.now()
       @view ->
         @viewed = true
@@ -90,7 +90,7 @@ module.exports = do ->
         @unloadTime = utils.now()
       @click ->
         @clicked = true
-    frameCount: 0
+    loadChain: 0
     notifyFrame:(cmd,data)->
       msgObj = sf.lib.lang.ParamHash()
       if @posConfig
@@ -117,7 +117,7 @@ module.exports = do ->
         referrer: @options.referrer
         location: document.location.href
         slot_id: @id
-        slot_count: @count
+        load_n: @count
       @posConfig = new sf.host.PosConfig
         id: @id
         dest:	elem.id
