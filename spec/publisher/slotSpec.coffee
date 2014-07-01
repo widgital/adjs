@@ -1,4 +1,5 @@
-window._TEST = true
+
+globals = require '../globals'
 sf = require 'safeframe'
 Session = require '../../lib/shared/session'
 Slot = require '../../lib/publisher/slot'

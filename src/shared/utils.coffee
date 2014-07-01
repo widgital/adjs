@@ -1,17 +1,11 @@
-window.reqwest or= require 'reqwest'
+window.JSON or= require 'json'
+reqwest = require 'reqwest'
 window.JSON or= require 'json'
 
-module.exports = do ()->
+module.exports = do ($sf)->
 
-  reqwest = window.reqwest
-
-  sendRequest = (url,options)->
-    reqwest
-      url: url
-      type: 'jsonp'
-      success: options.success
-      error: options.error
-      data: options.data
+  sendRequest = (options)->
+    reqwest options
 
   fromQuery = (query="",delim="&")->
     params = {}
@@ -43,6 +37,9 @@ module.exports = do ()->
         else
           obj.__defineGetter__(prop,descriptor.get) if descriptor.get?
           obj.__defineSetter__(prop,descriptor.set) if descriptor.set?
+      else
+        if descriptor.value
+          obj[prop] = descriptor.value
     catch e
       console.log(e)
       #

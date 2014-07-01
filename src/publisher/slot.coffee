@@ -124,6 +124,7 @@ module.exports = do ->
         w:  width
         h:	height
         supports: supports
+        renderFile: @options.renderFile
 
       @pos	= new sf.host.Position(@posConfig.id, html, @posMeta)
       if @options.refresh_oov
@@ -176,6 +177,7 @@ module.exports = do ->
 
 
 
+
   Slot.destroy = ()->
     ad.destroy() for _,ad of slots
 
@@ -218,5 +220,8 @@ module.exports = do ->
 
   Slot.slots = slots
   Slot.sizes = sizes
+
+
+
 
   Slot

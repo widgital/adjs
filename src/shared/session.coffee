@@ -103,6 +103,7 @@ module.exports = do ->
       if @attributes[vkey]?
         updatedVals[vkey] =  utils.toNumber(@attributes[vkey])+1
       @set(updatedVals,options)
+    path:"/page"
   Session.VISITOR_EXPIRY = config.visit_expiry #20 seconds...
 
   if process.env.ENV == "test" or (_TEST? and _TEST)

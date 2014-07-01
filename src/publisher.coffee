@@ -16,10 +16,14 @@ do (window)->
 
 
   # Notify of new page, set the page ID
-  stream.page session
+#  stream.page session
+
+
 
 
   safeframeUrl = config.cdn_url
+  controllerUrl = config.controller_url
+#  controllerUrl = config.api + "/controller"
 #  if process.env.ENV == "production"
 #    safeframeUrl = process.env.CDN_URL
 #  else
@@ -41,6 +45,7 @@ do (window)->
         args = null
       return
     else
+      renderController()
       divs = (div for div in document.getElementsByTagName("div"))
       for d in divs when sfDom.attr(d,"data-adjs")
         do (d)->
@@ -73,6 +78,19 @@ do (window)->
   session.change ->
     for _,ad of AdJS.slots
       ad.notifyFrame("cookie-update",session.serializeCookie())
+  renderController = ->
+    div = document.createElement("div")
+    div.style.display="none"
+    div.id= sf.lib.lang.guid "controller"
+    document.body.appendChild(div)
+    AdJS("controller").create div,"",
+      width:1
+      height:1
+      supports:["write-cookie","read-cookie"]
+      renderFile: controllerUrl
+      session: session?.serializeCookie()
+      pageReferrer: document.referrer
+      ignoreEvents:  true
 
   AdJS.render = (cb)->
     adJsScript = (s for s in document.getElementsByTagName("script") when sfDom.attr(s,"data-adjs"))[0]

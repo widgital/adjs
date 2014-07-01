@@ -1,3 +1,4 @@
+globals = require '../globals'
 sf = require 'safeframe'
 event = require('../../lib/shared/event')(['test1','test2'])
 class TestEvent

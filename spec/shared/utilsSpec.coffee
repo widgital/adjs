@@ -1,3 +1,4 @@
+globals = require '../globals'
 sf = require 'safeframe'
 utils = require '../../lib/shared/utils'
 

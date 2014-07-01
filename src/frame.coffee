@@ -1,5 +1,6 @@
 currentName = window.name
-sf = require('../node_modules/safeframe/lib/js/ext/ext')(true)
+
+$sf = require('../node_modules/safeframe/lib/js/ext/ext')(true)
 events = require('./shared/event')(["request","load","view","click","expanded","collapsed",
                                     "engage","unview","unload"])
 utils = require './shared/utils'
@@ -7,7 +8,7 @@ Request = require './request'
 stream = require './shared/stream'
 config = require './shared/config'
 
-do (sf,window)->
+do ($sf,window)->
 
   # initialize request
   request = new Request()
@@ -17,14 +18,16 @@ do (sf,window)->
     req_url_blind: true #todo this will not always be true
     tz:(new Date()).getTimezoneOffset()
 
+  document.domain = config.domain
+  controller = null
 
 
+#
+#  request.change ->
+#    stream.event request
+#  stream.event request
 
-  request.change ->
-    stream.event request
-  stream.event request
-
-  sfDom = sf.lib.dom
+  sfDom = $sf.lib.dom
   AdJS = {}
   utils.defineProperty AdJS,"isController",
     writable:false
@@ -119,7 +122,7 @@ do (sf,window)->
       showAdTimer=null
       $sf.ext.reload()
 
-  sf.lib.lang.mix(AdJS,events)
+  $sf.lib.lang.mix(AdJS,events)
 
   AdJS.on = (event,cb)->
     #registerForEvents() if not registered
@@ -143,13 +146,13 @@ do (sf,window)->
   registerAdJSendpoints()
 
   AdJS.click ->
-    sf.ext.click()
+    $sf.ext.click()
 
   AdJS.view  ->
-    sf.ext.viewed()
+    $sf.ext.viewed()
 
   AdJS.unview ->
-    sf.ext.unviewed()
+    $sf.ext.unviewed()
 
   AdJS.load ->
     registerForEvents()
@@ -239,20 +242,20 @@ do (sf,window)->
       unloadedAt:utils.now()
       unl_t: utils.now() - startTicks
 
-  sf.ext.render(false)
-  didShow = not sf.lib.lang.cbool(sf.ext.meta("inview","extended"))
-  referrerLevel = sf.ext.meta("referrer","extended") or "all"
-  host = sf.ext.meta("host","extended")
-  sf.ext.deleteMeta("host","extended")
-  location = sf.ext.meta("location","extended")
-  sf.ext.deleteMeta("location","extended")
-  setSessionInfo sf.ext.meta("session","extended"),silent:true
-  sf.ext.deleteMeta("session","extended")
-  $ad.slotId = sf.ext.meta("slot_id","extended")
-  $ad.count =  sf.ext.meta("load_n","extended")
+  $sf.ext.render(false)
+  didShow = not $sf.lib.lang.cbool($sf.ext.meta("inview","extended"))
+  referrerLevel = $sf.ext.meta("referrer","extended") or "all"
+  host = $sf.ext.meta("host","extended")
+  $sf.ext.deleteMeta("host","extended")
+  location = $sf.ext.meta("location","extended")
+  $sf.ext.deleteMeta("location","extended")
+  setSessionInfo $sf.ext.meta("session","extended"),silent:true
+  $sf.ext.deleteMeta("session","extended")
+  $ad.slotId = $sf.ext.meta("slot_id","extended")
+  $ad.count =  $sf.ext.meta("load_n","extended")
   request.set
-    slot_id:  sf.ext.meta("slot_id","extended")
-    load_n: sf.ext.meta("load_n","extended"),
+    slot_id:  $sf.ext.meta("slot_id","extended")
+    load_n: $sf.ext.meta("load_n","extended"),
     page_url: location
     page_host: host
     {silent:true}
@@ -262,5 +265,16 @@ do (sf,window)->
   else
     window.name = currentName
     document.location = document.location
+  findController = ->
+    for frame in frames window.parent.frames
+      try
+        if frame.$ad?.isController
+          controller = frame
+          request.change ->
+            controller.send(request)
+          controller.send(request)
+          return
+      catch
+    setTimeout(findController,100)
 
   AdJS

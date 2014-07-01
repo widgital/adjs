@@ -1,9 +1,16 @@
+#todo make this send multiple api and queue and listener need to be updated for this to happen
 config = require '../shared/config'
-reqwest = require 'reqwest'
-module.exports = ()->
+utils = require '../shared/utils'
+
+
+module.exports = do ($sf)->
   prefix = config.api
+
   pendingRequests = {}
   sendingRequests = {}
+  RETRY_TIMEOUT = 100
+  isTimeout = false
+  timeoutValue = null
   mapping =
     id: "user_id"
     p: "site_page_vw"
@@ -17,86 +24,59 @@ module.exports = ()->
     vav: "vis_ad_vw"
     vae: "vis_ad_vw_eng"
     vac: "vis_ad_clk"
-  send = (obj)->
-    pendingRequests[obj.id] = obj
+  send = (obj,cb)->
+    pendingRequests[obj.id] = [obj,cb]
     postData()
-  success = (obj,cb)->
-  error = (obj,cb)->
+  success = (obj,resp,cb)->
+    obj.set(resp,silent:true)
+    delete sendingRequests[obj.id]
+    cb?(obj)
+  error = (obj,err,cb)->
 
-  postData = ->
-    for id,obj of pendingRequests when not sendingRequests[obj.id]
-      delete pendingRequests[id]
-      params = {}
-      params[mapping[k] or k] = v for k,v of obj.attributes
-      send prefix + obj.path,params,
-
-#      sendingRequests[request.id] = true
-#      params = {}
-#      params[mapping[k] or k] = v for k,v of request.attributes
-#      send prefix + '/event', params, success, error
-#    else if !pendingRequests[request.id] or isAttempt
-#      pendingRequests[request.id]
-#      setTimeout( =>
-#        @event(request,cb,true)
-#      ,500)
-
+  sendData = (params,obj,cb)->
+    requestParams =
+      data:params
+      success:(resp)->success(obj,resp,cb)
+      error:(err)->error(obj,err,cb)
+    if prefix.indexOf(document.location.hostname)>=0
+      requestParams.method = "post"
+      requestParams.url = obj.path
+    else
+      requestParams.type="jsonp"
+      requestParams.url = prefix + obj.path
+    utils.sendRequest requestParams
 
 
 
-
-
-
-
-
+  postData = ()->
+    for id,[obj,cb] of pendingRequests
+      unless sendingRequests[obj.id] #when not sendingRequests[obj.id] compiling to !(!(sendingRequests[obj.id]))
+        delete pendingRequests[id]
+        params = {}
+        params[mapping[k] or k] = v for k,v of obj.attributes
+        sendingRequests[obj.id] = obj
+        sendData(params,obj,cb)
+    if $sf.lib.lang.keys(pendingRequests).length>0 && !isTimeout
+      isTimeout = true
+      timeoutValue = setTimeout(->
+        isTimeout=false
+        postData()
+      ,RETRY_TIMEOUT)
 
   endpoint = send:send
   if process.env.ENV == "test"
     endpoint.postData = postData
+    endpoint.sendData = sendData
+    endpoint.success = success
+    endpoint.error = error
+    endpoint.sendingRequests = sendingRequests
+    endpoint.pendingRequests = pendingRequests
+    endpoint.clear = ->
+      isTimeout = false
+      sendingRequests = {}
+      pendingRequests = {}
+      endpoint.sendingRequests = sendingRequests
+      endpoint.pendingRequests = pendingRequests
+      clearTimeout(timeoutValue)
 
-
-
-
-
-
-#
-#  send = (url, data, success, error)->
-#    reqwest
-#      url: url
-#      type: 'jsonp'
-#      data: data
-#      success: success
-#      error: error
-#
-#  page: (session)->
-#
-#    success = (resp)->
-#      session.set(resp)
-#
-#    error = (err)->
-#      console.log "ERROR:" + err
-#
-#    # map the keys used in cookies to more descriptive keys that are used by the api
-#    #    subst = {}
-#    #    obj = {};
-#    #    obj[subst[k]] = v for k, v of session.attributes when subst[k]
-#    send prefix + '/page', session.attributes, success, error
-#
-#  event: (request,cb,isAttempt)->
-#
-#    success = (resp)->
-#      request.set(resp,silent:true)
-#      cb?(resp)
-#      delete sendingRequests[request.id]
-#    error = (err)->
-#      console.log "ERROR:" + err
-#    if !sendingRequests[request.id]
-#      delete pendingRequests[request.id]
-#      sendingRequests[request.id] = true
-#      params = {}
-#      params[mapping[k] or k] = v for k,v of request.attributes
-#      send prefix + '/event', params, success, error
-#    else if !pendingRequests[request.id] or isAttempt
-#      pendingRequests[request.id]
-#      setTimeout( =>
-#        @event(request,cb,true)
-#      ,500)
+  return endpoint

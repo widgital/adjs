@@ -1,4 +1,4 @@
-window._TEST = true
+globals = require '../globals'
 sf = require 'safeframe'
 utils = require '../../lib/shared/utils'
 Session = require '../../lib/shared/session'

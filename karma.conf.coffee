@@ -10,7 +10,6 @@ module.exports = (config) ->
 #      'src/**/*.coffee',
       {pattern:'node_modules/jquery/dist/jquery.js', watched: false, served: true, included: true}
       {pattern:'node_modules/jasmine-jquery/lib/jasmine-jquery.js', watched: false, served: true, included: true},
-      'spec/globals.js',
       'lib/html/adjsframe.html',
       'spec/**/*.coffee',
       'spec/fixtures/**/*.html',

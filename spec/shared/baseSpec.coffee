@@ -1,3 +1,4 @@
+globals = require '../globals'
 sf = require 'safeframe'
 Base = require('../../lib/shared/base')
 

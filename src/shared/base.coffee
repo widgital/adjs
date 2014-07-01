@@ -1,9 +1,11 @@
+uuid = require 'node-uuid'
 module.exports = do ()->
   #base class to handle object level events... not sure how to use this yet
 
   class Base
 
     constructor:()->
+      @id = uuid.v4()
       @attributes ||= {}
       @_events = []
 

@@ -1,3 +1,4 @@
-window.process =  window.process || {};
-window.process.env = window.process.env || {};
-window.process.env.ENV = "test";
+module.exports = (function(){
+  process.env.ENV="test";
+  return {};
+})();
