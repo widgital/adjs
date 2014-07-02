@@ -63,7 +63,7 @@ module.exports = (config) ->
   # test results reporter to use
   # possible values: 'dots', 'progress'
   # available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ["progress","saucelabs"]
+    reporters: ["progress"]
 
   # web server port
     port: 9876
@@ -77,14 +77,14 @@ module.exports = (config) ->
 
   # enable / disable watching file and executing tests whenever any file changes
     autoWatch: true
-    customLaunchers: customLaunchers,
+#    customLaunchers: customLaunchers,
   # start these browsers
   # available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ["Chrome","sl_ie_8"]
+    browsers: ["Chrome"]
 
   # Continuous Integration mode
   # if true, Karma captures browsers, runs the tests and exits
-    singleRun: true
+    singleRun: false
     client:
       useIframe: false
 

@@ -17,9 +17,11 @@ describe 'Session',->
     session = undefined
     beforeEach ->
       session = new Session()
-    it 'should not update visit id if last_updated < Visitory expiry should update lastvisit time',->
+    it 'should not update visit id if last_updated < Visitor expiry should update lastvisit time',->
       oldVisitId = session.attributes.vid
+      console.log(session.attributes.vts,utils.now()/1000)
       Session._updateVisitId.call(session)
+
       expect(session.attributes.vid).toBe(oldVisitId)
       expect(session.attributes.v).toBe(1)
     it 'should update visit id if last updated > VISITOR_EXPIRY',->
