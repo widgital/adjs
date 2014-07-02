@@ -41,7 +41,7 @@ module.exports = do ($sf)->
         if descriptor.value
           obj[prop] = descriptor.value
     catch e
-      console.log(e)
+
       #
 
   countFrames = (win)->

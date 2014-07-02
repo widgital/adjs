@@ -47,6 +47,10 @@ karma start
 
 Keep Karma running and it will rerun tests as you make changes
 
+To use sauce labs:
+make sure process.env.SAUCE_USERNAME and process.env.SAUCE_ACCESS_KEY
+set singleRun:true in the karma.conf.coffee
+
 
 ### Building the distribution
 

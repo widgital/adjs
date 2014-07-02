@@ -54,7 +54,6 @@ describe 'Slot',->
           expect(this._refreshInterval).toBeTruthy()
           done()
       it 'should fire the refresh event when it gets refreshed',(done)->
-        console.log("prefresh")
         Slot("leaderboard").refreshed ()->
           expect(this.count).toBe(2) #will time out otherwise...
           done()

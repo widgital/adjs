@@ -7,11 +7,12 @@ module.exports = do ->
     version:"0.0.1"
     domain:"localhost"
   else if process.env.ENV == "production"
-    api: "//endpoint.adjs.io/1"
-    cdn_url: process.env.CDN_URL
+    api: "//api.adjs.net/1"
+    cdn_url: "//cdn.adjs.net/html/adjsframe.html"
     visit_expiry: 30
     version:"0.0.1"
     domain:"adjs.net"
+    controller_url:"//cdn.adjs.net/html/controllerframe.html"
   else
     api: '//endpoint.adjs.dev:8080/1'
     cdn_url: '../lib/html/adjsframe.html'

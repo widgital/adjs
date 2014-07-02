@@ -73,7 +73,7 @@ do (window)->
   AdJS.click ->
     session.incr("ac")
   AdJS.load ->
-    console.log("loaded")
+
 
   session.change ->
     for _,ad of AdJS.slots

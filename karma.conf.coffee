@@ -1,7 +1,31 @@
 # Karma configuration
 # Generated on Mon Jun 09 2014 15:56:06 GMT-0400 (EDT)
 module.exports = (config) ->
+  customLaunchers =
+    sl_ios_safari:
+      base: "SauceLabs"
+      browserName: "iphone"
+      platform: "OS X 10.9"
+      version: "7.1"
+
+    sl_ie_8:
+      base: "SauceLabs"
+      browserName: "internet explorer"
+      platform: "Windows xp"
+      version: "8"
+    sl_android:
+      base:"SauceLabs"
+      browserName:"android"
+      platform:"Linux"
+      version:"4.3"
+      deviceName:"LG Nexus 4 Emulator"
+
+
+
   config.set
+
+    sauceLabs:
+      testName: 'Ad.js Specs'
 
 
   # base path that will be used to resolve all patterns (eg. files, exclude)
@@ -39,7 +63,7 @@ module.exports = (config) ->
   # test results reporter to use
   # possible values: 'dots', 'progress'
   # available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ["progress"]
+    reporters: ["progress","saucelabs"]
 
   # web server port
     port: 9876
@@ -49,18 +73,18 @@ module.exports = (config) ->
 
   # level of logging
   # possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_DEBUG
+    logLevel: config.LOG_INFO
 
   # enable / disable watching file and executing tests whenever any file changes
     autoWatch: true
-
+    customLaunchers: customLaunchers,
   # start these browsers
   # available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ["Chrome"]
+    browsers: ["Chrome","sl_ie_8"]
 
   # Continuous Integration mode
   # if true, Karma captures browsers, runs the tests and exits
-    singleRun: false
+    singleRun: true
     client:
       useIframe: false
 
