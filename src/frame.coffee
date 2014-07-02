@@ -11,15 +11,36 @@ config = require './shared/config'
 do ($sf,window)->
 
   # initialize request
+  document.domain = config.domain
+  controller = null
+  sfDom = $sf.lib.dom
+  AdJS = {}
+  utils.defineProperty AdJS,"isController",
+    writable:false
+    value:false
+    configurable:false
+
+
   request = new Request()
   request.set
     load_pos:utils.getFramePosition(window)
     v_js:config.version
     req_url_blind: true #todo this will not always be true
     tz:(new Date()).getTimezoneOffset()
+  findController = ->
+    for frame in window.parent.frames
+      try
+        if frame.$ad?.isController
+          controller = frame.$ad
+          request.change ->
+            controller.send(request)
+          controller.send(request)
+          return
+      catch
+    setTimeout(findController,100) unless controller
+  findController()
 
-  document.domain = config.domain
-  controller = null
+
 
 
 #
@@ -27,12 +48,6 @@ do ($sf,window)->
 #    stream.event request
 #  stream.event request
 
-  sfDom = $sf.lib.dom
-  AdJS = {}
-  utils.defineProperty AdJS,"isController",
-    writable:false
-    value:false
-    configurable:false
 
 
   VIEWED_STRIKE = 9
@@ -265,16 +280,6 @@ do ($sf,window)->
   else
     window.name = currentName
     document.location = document.location
-  findController = ->
-    for frame in frames window.parent.frames
-      try
-        if frame.$ad?.isController
-          controller = frame
-          request.change ->
-            controller.send(request)
-          controller.send(request)
-          return
-      catch
-    setTimeout(findController,100)
+
 
   AdJS

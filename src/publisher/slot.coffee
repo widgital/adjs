@@ -7,7 +7,7 @@ events = require('../shared/event')(["request","click","load","view",
                                     "cookie","receive","unview","timeout"])
 sfDom = sf.lib.dom
 
-module.exports = do ->
+module.exports = do (sf)->
   TIMEOUT_TIME  = 5000
   slots = {} # this should change tie objects to dom objects
   SCRIPT_REGEX = /<!--([\s\S]*)-->/

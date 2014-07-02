@@ -80,12 +80,15 @@ do (window)->
       ad.notifyFrame("cookie-update",session.serializeCookie())
   renderController = ->
     div = document.createElement("div")
-    div.style.display="none"
+    parent = document.createElement("div")
+    parent.appendChild(div)
+    parent.style.display= "none"
+#    div.style.visibility="hidden"
     div.id= sf.lib.lang.guid "controller"
-    document.body.appendChild(div)
-    AdJS("controller").create div,"",
-      width:1
-      height:1
+    document.body.appendChild(parent)
+    AdJS("controller").create div,'',
+      width:10
+      height:10
       supports:["write-cookie","read-cookie"]
       renderFile: controllerUrl
       session: session?.serializeCookie()
@@ -95,7 +98,7 @@ do (window)->
   AdJS.render = (cb)->
     adJsScript = (s for s in document.getElementsByTagName("script") when sfDom.attr(s,"data-adjs"))[0]
     clientId = sfDom.attr(adJsScript,"data-client-id")
-    session.set("client_id",clientId)
+    session.set("client_id":clientId)
     initSafeFrame()
     doRender()
   #session events

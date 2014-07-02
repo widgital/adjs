@@ -24,6 +24,8 @@ describe 'TestObj',->
         two:"two"
       ,silent:true
       expect(o.f).not.toHaveBeenCalled()
+    it "should throw exception if non object is passed",->
+      expect(->testObj.set "test","value").toThrow()
   describe '#change',->
     obj=undefined
     beforeEach ->

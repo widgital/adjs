@@ -10,6 +10,7 @@ module.exports = do ()->
       @_events = []
 
     set:(attrs,options={})->
+      throw "attrs must be an object" unless typeof attrs == "object"
       changed = false
       changedAttributes = []
       for k,v of attrs

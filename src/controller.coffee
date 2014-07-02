@@ -11,7 +11,7 @@ do ($sf,window)->
   session = new Session()
   document.domain = config.domain
   session.change ->
-#    endpoint.send(session)
+    endpoint.send(session)
   utils.defineProperty Controller,"isController",
     writeable:false
     value:true
@@ -26,7 +26,7 @@ do ($sf,window)->
     configurable: false
   referrer = document.referrer
   setSessionInfo = (params)->
-    session.set(params)
+    session.set(utils.fromQuery params)
 
   try
     utils.defineProperty document,"referrer",
@@ -34,14 +34,10 @@ do ($sf,window)->
         return ""
   catch e
     #do nothing
-  onUpdate = ->
+  onUpdate = (status,data)->
     switch status
       when "cookie-update" then setSessionInfo(unescape(data.value))
-#  delete window.$sf
-#  utils.defineProperty window,"$sf",
-#    writeable: false
-#    value: null
-#    configurable: false
+
   $sf.ext.render(true)
 
   setSessionInfo $sf.ext.meta("session","extended"),silent:true
