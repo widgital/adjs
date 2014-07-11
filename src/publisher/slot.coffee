@@ -112,7 +112,7 @@ module.exports = do (sf)->
       elem.id or=  sf.lib.lang.guid "pos"
       @posMeta = new sf.host.PosMeta null,"extended",
         inview: @options.inview
-        session: @options.session
+        page: @options.page
         host: document.location.hostname
         referrer: @options.referrer
         location: document.location.href
@@ -194,7 +194,7 @@ module.exports = do (sf)->
 
 
 
-  Slot.create = (d,session)->
+  Slot.create = (d,page)->
     template = d.innerHTML.match(SCRIPT_REGEX)?[1] or d.innerHTML
     posId = sf.lib.lang.guid "pos"
     adId = d.id or posId
@@ -213,7 +213,7 @@ module.exports = do (sf)->
       inview: sf.lib.lang.cbool(sfDom.attr(d,"data-inview"))
       refresh_time: sfDom.attr(d,"data-refresh-time")
       refresh_oov: sf.lib.lang.cbool(sfDom.attr(d,"data-refresh-oov"))
-      session: session?.serializeCookie()
+      page: page.serialize()
       referrer: sfDom.attr(d,"data-referrer")
       ignoreEvents:  sf.lib.lang.cbool(sfDom.attr(d,"data-ignore-events"))
     Slot(adId)

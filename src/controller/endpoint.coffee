@@ -11,22 +11,9 @@ module.exports = do ($sf)->
   RETRY_TIMEOUT = 100
   isTimeout = false
   timeoutValue = null
-  mapping =
-    id: "user_id"
-    p: "site_page_vw"
-    a: "site_ad_req"
-    av: "site_ad_vw"
-    ac: "site_ad_clk"
-    ae: "site_ad_vw_eng"
-    v: "site_vis"
-    vp: "vis_page_vw"
-    va: "vis_ad_req"
-    vav: "vis_ad_vw"
-    vae: "vis_ad_vw_eng"
-    vac: "vis_ad_clk"
-  send = (obj,cb)->
+  send = (obj,options,cb)->
     pendingRequests[obj.id] = [obj,cb]
-    postData()
+    postData(options)
   success = (obj,resp,cb)->
     obj.set(resp,silent:true)
     delete sendingRequests[obj.id]
@@ -53,7 +40,7 @@ module.exports = do ($sf)->
       unless sendingRequests[obj.id] #when not sendingRequests[obj.id] compiling to !(!(sendingRequests[obj.id]))
         delete pendingRequests[id]
         params = {}
-        params[mapping[k] or k] = v for k,v of obj.attributes
+        params[k] = v for k,v of obj.changedFields()
         sendingRequests[obj.id] = obj
         sendData(params,obj,cb)
     if $sf.lib.lang.keys(pendingRequests).length>0 && !isTimeout

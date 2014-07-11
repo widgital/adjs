@@ -1,24 +1,27 @@
 $sf = require('../node_modules/safeframe/lib/js/ext/ext')(true)
 utils = require('./shared/utils')
 endpoint = require './controller/endpoint'
-Session = require './shared/session'
+Page = require './shared/page'
 config = require './shared/config'
 
 
 do ($sf,window)->
   Controller = {}
   referrer = document.referrer
-  session = new Session()
+  page = null
+  requests = {}
   document.domain = config.domain
-  session.change ->
-    endpoint.send(session)
+
   utils.defineProperty Controller,"isController",
     writeable:false
     value:true
     configurable:false
   utils.defineProperty Controller,"send",
     writeable:false
-    value: endpoint.send
+    value:(request)->
+      requests[request.id] = request
+      request.set(page.attributes,silent:true)
+      endpoint.send(request)
     configurable:false
   utils.defineProperty window,"$ad",
     writeable: false
@@ -26,7 +29,8 @@ do ($sf,window)->
     configurable: false
   referrer = document.referrer
   setSessionInfo = (params)->
-    session.set(utils.fromQuery params)
+    page.deserialize(params)
+
 
   try
     utils.defineProperty document,"referrer",
@@ -39,10 +43,15 @@ do ($sf,window)->
       when "cookie-update" then setSessionInfo(unescape(data.value))
 
   $sf.ext.render(true)
-
-  setSessionInfo $sf.ext.meta("session","extended"),silent:true
-
   $sf.ext.register 0,0,onUpdate
+  page = new Page($sf.ext.meta("page","extended"))
+  page.change ->
+    endpoint.send(page)
+  # todo refactor most of this to iframe itself not a safeframe ever
+  endpoint.send page,global:true,()->
+    r.set(page.attributes,silent:true) for k,r in requests
+
+
 
 
 

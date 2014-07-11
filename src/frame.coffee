@@ -75,8 +75,6 @@ do ($sf,window)->
   registerAdJSendpoints = ()->
     true
 
-  setSessionInfo = (cookieData)->
-    request.set(utils.fromQuery(cookieData))
 
   updateReferrer = (level="all")->
     switch level
@@ -94,7 +92,6 @@ do ($sf,window)->
       when "expanded" then  ()-> AdJS.expanded()
       when "collapsed" then  ()-> AdJS.collapsed()
       when "geom-update" then showAd()
-      when "cookie-update" then setSessionInfo(unescape(data.value))
       when "engaged" then AdJS.engage()
       when "requested" then AdJS.request()  unless requested
 
@@ -204,6 +201,7 @@ do ($sf,window)->
 
   AdJS.load ->
     AdJS.loadTime = utils.now()
+    console.log("loooooaddeddddd")
     sfDom.attach window,"unload",->
       $ad.unload()
     request.set
@@ -264,8 +262,6 @@ do ($sf,window)->
   $sf.ext.deleteMeta("host","extended")
   location = $sf.ext.meta("location","extended")
   $sf.ext.deleteMeta("location","extended")
-  setSessionInfo $sf.ext.meta("session","extended"),silent:true
-  $sf.ext.deleteMeta("session","extended")
   $ad.slotId = $sf.ext.meta("slot_id","extended")
   $ad.count =  $sf.ext.meta("load_n","extended")
   request.set

@@ -82,9 +82,9 @@ module.exports = do ->
         attrs = parseCookie(cookie)
         @set(attrs,silent:true)
         updateVisitId.call(@,silent: true)
-        @serializeCookie()
+        @storeCookie()
       else
-        @serializeCookie()
+        @storeCookie()
 
     serializeCookie:->
       query = utils.toQuery(@attributes)
@@ -93,7 +93,7 @@ module.exports = do ->
 
     set:(attrs,options={})->
       super(attrs,options)
-      @serializeCookie()
+      @storeCookie()
 
     incr:(key,options)->
       @attributes[key] ||=0
@@ -104,6 +104,7 @@ module.exports = do ->
         updatedVals[vkey] =  utils.toNumber(@attributes[vkey])+1
       @set(updatedVals,options)
     path:"/page"
+    idField:"page_id"
   Session.VISITOR_EXPIRY = config.visit_expiry #20 seconds...
 
   if process.env.ENV == "test" or (_TEST? and _TEST)

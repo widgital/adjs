@@ -1,6 +1,6 @@
 sf =  require 'safeframe'
 engagement = require './shared/engagement'
-Session = require './shared/session'
+Page = require './shared/page'
 AdJS = require './publisher/slot'
 stream = require './shared/stream'
 config = require './shared/config'
@@ -8,8 +8,7 @@ utils  =require './shared/utils'
 
 do (window)->
   # initialize session
-  session = new Session()
-  session.incr("p")
+  page = new Page()
   startTicks = utils.now()
   pageLoadMs = 0
   pageDuration = 0
@@ -49,7 +48,7 @@ do (window)->
       divs = (div for div in document.getElementsByTagName("div"))
       for d in divs when sfDom.attr(d,"data-adjs")
         do (d)->
-          AdJS.create(d,session)
+          AdJS.create(d,page)
       cb?()
 
   initSafeFrame =  ->
@@ -64,20 +63,6 @@ do (window)->
       onPosMsg: (id,msg,content)->
         AdJS(id).handleMessage(msg,content)
 
-  AdJS.view ->
-    session.incr("av") #increment on any ad view
-  AdJS.engage ->
-    session.incr("ae")
-  AdJS.load ->
-    session.incr("a")
-  AdJS.click ->
-    session.incr("ac")
-  AdJS.load ->
-
-
-  session.change ->
-    for _,ad of AdJS.slots
-      ad.notifyFrame("cookie-update",session.serializeCookie())
   renderController = ->
     div = document.createElement("div")
     parent = document.createElement("div")
@@ -91,14 +76,14 @@ do (window)->
       height:10
       supports:["write-cookie","read-cookie"]
       renderFile: controllerUrl
-      session: session?.serializeCookie()
+      page: page.serialize()
       pageReferrer: document.referrer
       ignoreEvents:  true
 
   AdJS.render = (cb)->
     adJsScript = (s for s in document.getElementsByTagName("script") when sfDom.attr(s,"data-adjs"))[0]
     clientId = sfDom.attr(adJsScript,"data-client-id")
-    session.set("client_id":clientId)
+    page.set  client_id:clientId
     initSafeFrame()
     doRender()
   #session events
@@ -110,8 +95,7 @@ do (window)->
 
   do ->
     AdJS.render()
-#  AdJS.sizes= sizes
-  AdJS.session = session
+  AdJS.session = page
 
 
   window.$ad = AdJS
