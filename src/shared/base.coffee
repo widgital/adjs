@@ -19,7 +19,7 @@ module.exports = do ()->
         if @attributes[k] != v
           changedAttributes.push k
           @_dirty[k]=v
-        @attributes[k] = v
+          @attributes[k] = v
       if !options.silent && changedAttributes.length>0
         f.apply(@,[@,changedAttributes]) for f in @_events
     change:(f)->

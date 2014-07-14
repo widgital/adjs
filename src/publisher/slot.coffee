@@ -213,7 +213,7 @@ module.exports = do (sf)->
       inview: sf.lib.lang.cbool(sfDom.attr(d,"data-inview"))
       refresh_time: sfDom.attr(d,"data-refresh-time")
       refresh_oov: sf.lib.lang.cbool(sfDom.attr(d,"data-refresh-oov"))
-      page: page.serialize()
+      page: page?.serialize()
       referrer: sfDom.attr(d,"data-referrer")
       ignoreEvents:  sf.lib.lang.cbool(sfDom.attr(d,"data-ignore-events"))
     Slot(adId)

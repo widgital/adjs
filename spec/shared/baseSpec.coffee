@@ -3,6 +3,9 @@ sf = require 'safeframe'
 Base = require('../../lib/shared/base')
 
 class TestObj extends Base
+  constantFields:[
+    "foo"
+  ]
 
 
 describe 'TestObj',->
@@ -26,6 +29,9 @@ describe 'TestObj',->
       expect(o.f).not.toHaveBeenCalled()
     it "should throw exception if non object is passed",->
       expect(->testObj.set "test","value").toThrow()
+    it "should not set anything if value is undefined",->
+      testObj.set(test:undefined)
+      expect(Object.keys(testObj.attributes).length).toBe 0
   describe '#change',->
     obj=undefined
     beforeEach ->
@@ -55,4 +61,17 @@ describe 'TestObj',->
         three:"one"
         four:"two"
       expect(obj.change).not.toHaveBeenCalled()
+  describe "#serialize",->
+    it "should turn attributes into a query string",->
+      testObj.set(foo:"bar",test:"one")
+      expect(testObj.serialize()).toBe("foo=bar&test=one")
+  describe "#deserialize",->
+    it "should deserialize a query string into attributes",->
+      testObj.deserialize("foo=bar&test=one")
+      expect(testObj.attributes).toEqual(foo:"bar",test:"one")
+  describe "#changedFields",->
+    it "should return a list of fields that change + fields to always return and clean dirty",->
+      testObj.set(foo:"bar",test:"one")
+      expect(testObj.changedFields()).toEqual(foo:"bar",test:"one")
+      expect(testObj.changedFields()).toEqual(foo:"bar")
 

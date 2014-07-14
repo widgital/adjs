@@ -1,15 +1,12 @@
 
 globals = require '../globals'
 sf = require 'safeframe'
-Session = require '../../lib/shared/session'
 Slot = require '../../lib/publisher/slot'
 
 jasmine.getFixtures().fixturesPath = 'base/spec/fixtures/'
 
 describe 'Slot',->
-  session  = null
   beforeEach ->
-    session = new Session()
     Slot.destroy()
     sf.host.nuke()
     sf.host.Config
@@ -24,7 +21,6 @@ describe 'Slot',->
         Slot(id).handleMessage(msg,content)
   afterEach ->
     Slot.destroy()
-    Session.clearCookie()
   describe '#init',->
     it 'should be called from the Slot(adid)',->
       spyOn(Slot.prototype,"init")
@@ -41,7 +37,7 @@ describe 'Slot',->
       beforeEach ->
         loadFixtures("publisher/slot.html")
         $("#leaderboard")[0].dataset.refreshTime = 1
-        Slot.create($("#leaderboard")[0],session)
+        Slot.create($("#leaderboard")[0])
         Slot("leaderboard").load ->
           console.log("slot loaded")
 
@@ -81,7 +77,7 @@ describe 'Slot',->
   describe '#refresh',->
     beforeEach (done)->
       loadFixtures("publisher/slot.html")
-      slot = Slot.create($("#leaderboard")[0],session)
+      slot = Slot.create($("#leaderboard")[0])
       slot.load(done)
     it 'should refresh the ad',(done)->
       Slot("leaderboard").refreshed( ->

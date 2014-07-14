@@ -12,6 +12,12 @@ describe "Endpoint",->
     testClass = class TestClass extends Base
       constructor:->
         super
+        @set(id:@id)
+      path:"/test"
+      constantFields:[
+        "id"
+      ]
+
     spyOn(utils, "sendRequest").and.callFake (params)->
       if params.success
         setTimeout =>

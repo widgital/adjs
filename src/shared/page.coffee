@@ -18,16 +18,17 @@ module.exports = do ($sf,window)->
         @loadCookieData()
         @initDefaultAttributes()
     storeCookie:->
+      #use milliseconds for the expiration to allow for easier testing
       if $sf?.ext?.cookie?
         $sf.ext.cookie("#{COOKIE_KEY}_suid",
           {value:@attributes.site_user_id,expires:moment().add("years",1).toDate()}) if @attributes.site_user_id
         $sf.ext.cookie("#{COOKIE_KEY}_vid",
-          {value:@attributes.visit_id,expires:moment().add("years",1).toDate()}) if @attributes.visit_id
+          {value:@attributes.visit_id,expires:moment().add("seconds",config.visit_expiry*60).toDate()}) if @attributes.visit_id
       else
         cookies.set("#{COOKIE_KEY}_suid" ,
-          @attributes.site_user_id, { expires:moment().add("minutes",config.visit_expiry).toDate()   }) if @attributes.site_user_id #one year
+          @attributes.site_user_id, { expires:moment().add("years",1).toDate()   }) if @attributes.site_user_id #one year
         cookies.set("#{COOKIE_KEY}_vid" ,
-          @attributes.visit_id, { expires:moment().add("minutes",config.visit_expiry).toDate()}) if @attributes.visit_id
+          @attributes.visit_id, { expires:moment().add("seconds",config.visit_expiry*60).toDate()}) if @attributes.visit_id
     loadCookieData:->
       if $sf?.ext?.cookie?
         @set
@@ -64,9 +65,6 @@ module.exports = do ($sf,window)->
   Page.VISITOR_EXPIRY = config.visit_expiry #20 seconds...
 
   if process.env.ENV == "test" or (_TEST? and _TEST)
-    Page._updateVisitId = updateVisitId
-    Page._parseCookie = parseCookie
-    Page._getUser = getUserId
     Page._COOKIE_KEY  = COOKIE_KEY
     Page.clearCookie = ->
       cookies.set(COOKIE_KEY + "_suid",undefined)

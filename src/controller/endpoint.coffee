@@ -11,9 +11,9 @@ module.exports = do ($sf)->
   RETRY_TIMEOUT = 100
   isTimeout = false
   timeoutValue = null
-  send = (obj,options,cb)->
+  send = (obj,cb)->
     pendingRequests[obj.id] = [obj,cb]
-    postData(options)
+    postData()
   success = (obj,resp,cb)->
     obj.set(resp,silent:true)
     delete sendingRequests[obj.id]

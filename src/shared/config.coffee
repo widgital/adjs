@@ -3,7 +3,7 @@ module.exports = do ->
     api: '//endpoint.adjs.dev:8080/1'
     cdn_url: 'base/lib/html/adjsframe.html'
     controller_url: "base/lib/html/controllerframe.html"
-    visit_expiry: 5
+    visit_expiry: 0.03
     version:"0.0.1"
     domain:"localhost"
   else if process.env.ENV == "production"
