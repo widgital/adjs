@@ -21,7 +21,7 @@ task 'watchify', 'watch /debug files',->
   watchifyProcs = []
   watchifyProcs.push(spawn 'watchify', ['--debug', 'lib/frame.js', '-o', 'lib/frame.ad.js', '-v','-t','envify'])
   watchifyProcs.push(spawn 'watchify', ['--debug', 'lib/publisher.js' ,'-o' ,'lib/publisher.ad.js', '-v','-t','envify'])
-  watchifyProcs.push(spawn 'watchify', ['--debug', 'lib/advertiser.js', '-o', 'lib/advertiser.ad.js', '-v'])
+  watchifyProcs.push(spawn 'watchify', ['--debug', 'lib/adframe.js', '-o', 'lib/adframe.ad.js', '-v'])
   watchifyProcs.push(spawn 'watchify', ['--debug', 'lib/controller.js', '-o', 'lib/controller.ad.js', '-v'])
   for p in watchifyProcs
     p.stderr.on 'data', (data) ->
@@ -32,7 +32,7 @@ task 'build', 'build different files',->
   watchifyProcs = []
   watchifyProcs.push(spawn 'browserify', [ 'lib/frame.js', '-o', 'lib/dist/frame.ad.js','-t','envify'])
   watchifyProcs.push(spawn 'browserify', [ 'lib/publisher.js' ,'-o' ,'lib/dist/publisher.ad.js','-t','envify'])
-  watchifyProcs.push(spawn 'browserify', [ 'lib/advertiser.js', '-o', 'lib/dist/advertiser.ad.js'])
+  watchifyProcs.push(spawn 'browserify', [ 'lib/adframe.js', '-o', 'lib/dist/adframe.ad.js'])
   watchifyProcs.push(spawn 'browserify', [ 'lib/controller.js', '-o', 'lib/dist/controller.ad.js','-t','envify'])
   for p in watchifyProcs
     p.stderr.on 'data', (data) ->

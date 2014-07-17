@@ -1,7 +1,7 @@
 require 'safeframe'
 require '../globals'
 #todo something here when there is an error
-endpoint = require('../../lib/controller/endpoint')
+endpoint = require('../../lib/shared/endpoint')
 Base = require '../../lib/shared/base'
 utils = require '../../lib/shared/utils'
 uuid = require 'node-uuid'

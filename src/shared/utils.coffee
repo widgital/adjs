@@ -78,48 +78,18 @@ module.exports = do ($sf)->
   keys = (obj)->
     $sf?.lib.lang.keys(obj)
 
-
-#  getReferrer = (win,referrer=null)
-#    if win == window.top
-#
-
-#  getReferrer = (win)->
-#
-#
-#    # get referrer from query string
-#    qs = object.fromQuerystring("referrer", window.location.href) or object.fromQuerystring("referer", window.location.href)
-#    return qs if qs
-#
-#    # try to get the top referer - otherwise, move up the stack until we get something
-#    try
-#      referrer = window.top.document.referrer
-#    catch e
-#      w = window.parent
-#      do
-#        if w
-#        try
-#          referrer = w.document.referrer
-#        catch e2
-#          referrer = ''
-#
-#    referrer = document.referrer if referrer is ''
-#    referrer
-
-
-#
-#	 * Cross-browser helper function to add event handler
-##
-#object.addEventListener = (element, eventType, eventHandler, useCapture) ->
-#  if element.addEventListener
-#    element.addEventListener eventType, eventHandler, useCapture
-#    return true
-#  return element.attachEvent("on" + eventType, eventHandler)  if element.attachEvent
-#  element["on" + eventType] = eventHandler
-#  return
-
-
-
-
+  findController = (cb,retry=3)->
+    controller = null
+    for frame in window.top.frames
+      try
+        if frame.$ad?.isController
+          controller = frame.$ad
+          break
+      catch
+    if controller
+      cb(controller)
+    else
+      setTimeout((->findController(cb,retry-1)),100) unless retry<0
 
   capitalizeString  = (string)->
     string.charAt(0).toUpperCase() + string.slice(1);
@@ -135,3 +105,4 @@ module.exports = do ($sf)->
   keys: keys
   getFramePosition: getFramePosition
   reduce: reduce
+  findController: findController

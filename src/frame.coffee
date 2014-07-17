@@ -27,18 +27,12 @@ do ($sf,window)->
     v_js:config.version
     req_url_blind: true #todo this will not always be true
     tz:(new Date()).getTimezoneOffset()
-  findController = ->
-    for frame in window.parent.frames
-      try
-        if frame.$ad?.isController
-          controller = frame.$ad
-          request.change ->
-            controller.send(request)
-          controller.send(request)
-          return
-      catch
-    setTimeout(findController,100) unless controller
-  findController()
+  utils.findController (ctrl)->
+    controller = ctrl
+    request.change ->
+      controller.send(request)
+    controller.send(request)
+
 
 
 
@@ -122,7 +116,7 @@ do ($sf,window)->
       clearInterval(showAdTimer) if showAdTimer
       startTime = utils.now()
       AdJS.request()
-      $sf.ext.showAd ->
+      $sf.ext.showAd null,->
         AdJS.load()
       didShow=true
     else unless showAdTimer || didShow
@@ -153,7 +147,7 @@ do ($sf,window)->
     true
   )
 
-  window.$ad = AdJS
+
 
   registerAdJSendpoints()
 
@@ -201,9 +195,8 @@ do ($sf,window)->
 
   AdJS.load ->
     AdJS.loadTime = utils.now()
-    console.log("loooooaddeddddd")
     sfDom.attach window,"unload",->
-      $ad.unload()
+      AdJS.unload()
     request.set
       loaded:true
       loadedAt:utils.now()
@@ -262,8 +255,8 @@ do ($sf,window)->
   $sf.ext.deleteMeta("host","extended")
   location = $sf.ext.meta("location","extended")
   $sf.ext.deleteMeta("location","extended")
-  $ad.slotId = $sf.ext.meta("slot_id","extended")
-  $ad.count =  $sf.ext.meta("load_n","extended")
+  AdJS.slotId = $sf.ext.meta("slot_id","extended")
+  AdJS.count =  $sf.ext.meta("load_n","extended")
   request.set
     slot_id:  $sf.ext.meta("slot_id","extended")
     load_n: $sf.ext.meta("load_n","extended"),
@@ -276,6 +269,25 @@ do ($sf,window)->
   else
     window.name = currentName
     document.location = document.location
+  confirmChild = (win,adFrame)->
+    return true if win==adFrame
+    return (childFrame for childFrame in win.frames when confirmChild(childFrame,adFrame)).length > 0
+
+
+  readAd = (adFrame)->
+    if confirmChild(window,adFrame)
+      controller.combine(request,adFrame.getDetails())
+
+
+  utils.defineProperty window,"$ad",
+    writable:false
+    value:AdJS
+    configurable:false
+  utils.defineProperty AdJS,"readAd",
+    writable:false
+    value:readAd
+    configurable:false
+
 
 
   AdJS

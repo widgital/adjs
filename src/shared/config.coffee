@@ -3,6 +3,7 @@ module.exports = do ->
     api: '//endpoint.adjs.dev:8080/1'
     cdn_url: 'base/lib/html/adjsframe.html'
     controller_url: "base/lib/html/controllerframe.html"
+    ad_url: "base/lib/html/adframe.html"
     visit_expiry: 0.03
     version:"0.0.1"
     domain:"localhost"
@@ -13,6 +14,7 @@ module.exports = do ->
     version:"0.0.1"
     domain:"adjs.net"
     controller_url:"//cdn.adjs.net/html/controllerframe.html"
+    ad_url: "//cdn.adjs.net/html/adframe.html"
   else
     api: '//endpoint.adjs.dev:8080/1'
     cdn_url: '../lib/html/adjsframe.html'
@@ -20,3 +22,4 @@ module.exports = do ->
     version:"0.0.1"
     domain:"localhost"
     controller_url: "../lib/html/controllerframe.html"
+    ad_url:  "../lib/html/adframe.html"

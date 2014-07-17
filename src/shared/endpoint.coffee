@@ -1,6 +1,6 @@
 #todo make this send multiple api and queue and listener need to be updated for this to happen
-config = require '../shared/config'
-utils = require '../shared/utils'
+config = require './config'
+utils = require './utils'
 
 
 module.exports = do ($sf)->
@@ -14,9 +14,33 @@ module.exports = do ($sf)->
   send = (obj,cb)->
     pendingRequests[obj.id] = [obj,cb]
     postData()
+  #todo move this out of endpoint
+  combine = (req,adReq,cb,retry=3)->
+    attrs = {}
+    if req.attributes.req_id and adReq.attributes.ad_id
+      attrs[f] = adReq.attributes[f] for f in adReq.constantFields
+      attrs[f] = req.attributes[f] for f in req.constantFields
+      requestParams =
+        data:attrs
+        success:(resp)->cb?(resp)
+        error:(err)-> cb?(err)
+      if prefix.indexOf(document.location.hostname)>=0
+        requestParams.method = "post"
+        requestParams.url = "event_ads"
+      else
+        requestParams.type="jsonp"
+        requestParams.url = prefix + "/event_ads"
+      utils.sendRequest requestParams
+    else if retry>=0
+      setTimeout((=>combine(req,adReq,cb,retry-1)),100)
+
+
+
+
   success = (obj,resp,cb)->
     obj.set(resp,silent:true)
     delete sendingRequests[obj.id]
+    console.log "cb"
     cb?(obj)
   error = (obj,err,cb)->
 
@@ -50,7 +74,10 @@ module.exports = do ($sf)->
         postData()
       ,RETRY_TIMEOUT)
 
-  endpoint = send:send
+  endpoint =
+    send:send
+    combine: combine
+
   if process.env.ENV == "test"
     endpoint.postData = postData
     endpoint.sendData = sendData
