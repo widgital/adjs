@@ -32,13 +32,25 @@ task 'build', 'build different files',->
   watchifyProcs = []
   watchifyProcs.push(spawn 'browserify', [ 'lib/frame.js', '-o', 'lib/dist/frame.ad.js','-t','envify'])
   watchifyProcs.push(spawn 'browserify', [ 'lib/publisher.js' ,'-o' ,'lib/dist/publisher.ad.js','-t','envify'])
-  watchifyProcs.push(spawn 'browserify', [ 'lib/adframe.js', '-o', 'lib/dist/adframe.ad.js'])
+  watchifyProcs.push(spawn 'browserify', [ 'lib/adframe.js', '-o', 'lib/dist/adframe.ad.js','-t','envify'])
   watchifyProcs.push(spawn 'browserify', [ 'lib/controller.js', '-o', 'lib/dist/controller.ad.js','-t','envify'])
   for p in watchifyProcs
     p.stderr.on 'data', (data) ->
       process.stderr.write data.toString()
     p.stdout.on 'data', (data) ->
       print data.toString()
+task 'minify', 'minify different files',->
+  watchifyProcs = []
+  watchifyProcs.push(spawn 'uglifyjs', [ 'lib/dist/frame.ad.js', '-o', 'lib/dist/frame.ad.min.js','-c'])
+  watchifyProcs.push(spawn 'uglifyjs', [ 'lib/dist/publisher.ad.js' ,'-o' ,'lib/dist/publisher.ad.min.js','-c'])
+  watchifyProcs.push(spawn 'uglifyjs', [ 'lib/dist/adframe.ad.js', '-o', 'lib/dist/adframe.ad.min.js','-c'])
+  watchifyProcs.push(spawn 'uglifyjs', [ 'lib/dist/controller.ad.js', '-o', 'lib/dist/controller.ad.min.js','-c'])
+  for p in watchifyProcs
+    p.stderr.on 'data', (data) ->
+      process.stderr.write data.toString()
+    p.stdout.on 'data', (data) ->
+      print data.toString()
+
 
 task 'upload', 'upload scripts to ec2',->
 
