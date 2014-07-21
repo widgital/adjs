@@ -85,3 +85,46 @@ describe "Endpoint",->
       expect(true).toBe(true)
     it "should do jsonp if xdm",->
       expect(true).toBe(true)
+  describe ".combine",->
+    reqObj = null
+    adObj = null
+    beforeEach ->
+      reqObj = new testClass()
+      adObj = new testClass
+      reqObj.constantFields = ["one","two","req_id"]
+      adObj.constantFields = ["four","five","ad_id"]
+    it "should not send until ad id is set on both objects",(done)->
+      endpoint.combine reqObj,adObj,->
+        expect(reqObj.attributes.req_id).toBeDefined()
+        expect(adObj.attributes.ad_id).toBeDefined()
+        done()
+      setTimeout( ->
+        reqObj.set(req_id:"1")
+        adObj.set(ad_id:"2")
+      ,130)
+
+    it "should send combined set of fields",(done)->
+      reqObj.set
+        req_id:"1"
+        one:"1"
+        two:"2"
+      adObj.set
+        ad_id:"1"
+        four:"four"
+        five:"5"
+      expectedResult =
+        req_id:"1"
+        one:"1"
+        two:"2"
+        ad_id:"1"
+        four:"four"
+        five:"5"
+      endpoint.combine reqObj,adObj,->
+        expect(utils.sendRequest.calls.mostRecent().args[0].data).toEqual(expectedResult)
+        done()
+
+
+
+
+
+

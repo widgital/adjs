@@ -40,7 +40,6 @@ module.exports = do ($sf)->
   success = (obj,resp,cb)->
     obj.set(resp,silent:true)
     delete sendingRequests[obj.id]
-    console.log "cb"
     cb?(obj)
   error = (obj,err,cb)->
 
