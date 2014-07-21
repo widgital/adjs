@@ -3,8 +3,11 @@ reqwest = require 'reqwest'
 window.JSON or= require 'json'
 
 module.exports = do ($sf)->
+  reqId = 0
 
   sendRequest = (options)->
+    reqId++
+    options.jsonpCallbackName = "adjs_#{now()}_#{reqId}"  if options.type=="jsonp"
     reqwest options
 
   fromQuery = (query="",delim="&")->
