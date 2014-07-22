@@ -196,6 +196,8 @@ module.exports = do (sf)->
 
   Slot.create = (d,page)->
     template = d.innerHTML.match(SCRIPT_REGEX)?[1] or d.innerHTML
+    isEscaped = sf.lib.lang.cbool(sfDom.attr(d,"data-escaped"))
+    template = sf.lib.lang.jsunsafe_html(template) if isEscaped
     posId = sf.lib.lang.guid "pos"
     adId = d.id or posId
     div = document.createElement "div"

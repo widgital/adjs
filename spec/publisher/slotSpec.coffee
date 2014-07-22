@@ -32,6 +32,8 @@ describe 'Slot',->
     it 'should retreive the existing slot',->
       retrieved = Slot("testretrieve")
       expect(Slot("testretrieve")).toBe(retrieved)
+
+
   describe 'autorefresh',->
     describe '#startAutoRefresh',->
       beforeEach ->
