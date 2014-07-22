@@ -195,6 +195,25 @@ The Ad.js framework can be broken down into the following components:
 
 * Know who is storing data about your users
 
+#### How to install
+
+Add this script to your head:
+<script src='//cdn.adjs.net/adjs.min.js' data-adjs='true' data-adjs-id='CLIENT_ID_HERE'></script>
+
+Replace your ad tags with the following:
+<div id="SLOT_ID" data-width="AD_WIDTH" data-height="AD_HEIGHT" data-adjs="true" >
+    <!--
+    INSERT AD TAG HERE
+    -->
+</div>
+Other data options to be added are as follows:
+  * data-supports: Acceptable values - exp-push,read-cookie, write-cookie
+  * data-disables: Acceptable values - exp-over
+  * data-inview: true or false. Only show ad when page it is inview
+  * data-refresh-time: any number greater than 0. Auto refresh ad after a certain period
+  * data-refresh-oov: true or false. Refresh ad when its been in view and leaves view
+  * data-referrer: all, host, none  - Restricts referrer from advertiser (experimental does not work in safari/mobile safari)
+
 ### Advertiser
 
 ### Ad Networks
