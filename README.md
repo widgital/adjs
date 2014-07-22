@@ -198,14 +198,21 @@ The Ad.js framework can be broken down into the following components:
 #### How to install
 
 Add this script to your head:
+
+```
 <script src='//cdn.adjs.net/adjs.min.js' data-adjs='true' data-adjs-id='CLIENT_ID_HERE'></script>
+```
 
 Replace your ad tags with the following:
+
+```
 <div id="SLOT_ID" data-width="AD_WIDTH" data-height="AD_HEIGHT" data-adjs="true" >
     <!--
     INSERT AD TAG HERE
     -->
 </div>
+```
+
 Other data options to be added are as follows:
   * data-supports: Acceptable values - exp-push,read-cookie, write-cookie
   * data-disables: Acceptable values - exp-over
