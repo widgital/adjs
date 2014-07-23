@@ -46,12 +46,12 @@ module.exports = do ($sf,window)->
     initDefaultAttributes:->
       if window==window.top
         @set
-          full_url:window.document.location.href
-          referrer:window.document.referrer
+          url:window.document.location.href
+          ref:window.document.referrer
         ,silent:true
       else if window.parent==window.top
         @set
-          full_url:window.document.referrer
+          url:window.document.referrer
     verifyUrl:->
       if  window.parent==window.top && window.document.referrer #this shouldnt be neccasary but whatevs
         true #some of this should be done on the serer
@@ -60,7 +60,7 @@ module.exports = do ($sf,window)->
       "site_user_id",
       "page_id",
       "visit_id",
-      "full_url"
+      "url"
     ]
   Page.VISITOR_EXPIRY = config.visit_expiry #20 seconds...
 

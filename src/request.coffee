@@ -11,7 +11,7 @@ module.exports = do (window)->
       "site_user_id",
       "page_id",
       "visit_id",
-      "full_url",
+      "url",
       "req_id"
     ]
 

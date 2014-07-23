@@ -9,8 +9,8 @@ module.exports = do (window)->
         @deserialize(serializedParams)
       else
         @set
-          full_url:window.document.location.href
-          referrer:window.document.referrer
+          url:window.document.location.href
+          ref:window.document.referrer
         ,silent:true
     path:"/ad"
     constantFields:[
