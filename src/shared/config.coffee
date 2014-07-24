@@ -1,4 +1,7 @@
 module.exports = do ->
+  #The applications configuration
+  #the build process sets the environment
+  #Minifying will remove everything but the expected values
   return if process.env.ENV == "test"
     api: '//endpoint.adjs.dev:8080/1'
     cdn_url: 'base/lib/html/adjsframe.html'

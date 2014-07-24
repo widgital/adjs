@@ -16,13 +16,14 @@ describe 'Page',->
     it "should set default attributes",->
       page = new Page()
       expect(page.attributes).toEqual
-        full_url: document.location.href
-        referrer: document.referrer
+        url: document.location.href
+        ref: document.referrer
+        v_js : '0.0.1'
     it "should load from query string and not set default attributes",->
-      page = new Page("site_user_id=jason&visit_id=fertel&full_url=http%3A%2F%2Fwww.example.com%2Ftest")
+      page = new Page("site_user_id=jason&visit_id=fertel&url=http%3A%2F%2Fwww.example.com%2Ftest")
       expect(page.attributes).toEqual
         site_user_id: "jason"
-        full_url: "http://www.example.com/test"
+        url: "http://www.example.com/test"
         visit_id: "fertel"
     it "should store cookie",->
       page = new Page("site_user_id=jason&visit_id=fertel")

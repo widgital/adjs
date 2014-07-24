@@ -1,7 +1,11 @@
+#[Base](./base.html)
 Base = require './base'
+#[Config](./config.html)
+config = require './config'
 
 
 module.exports = do (window)->
+  # The object representing the ad request
   class AdRequest extends Base
     constructor:(serializedParams)->
       super
@@ -11,6 +15,7 @@ module.exports = do (window)->
         @set
           url:window.document.location.href
           ref:window.document.referrer
+          v_js:config.version
         ,silent:true
     path:"/ad"
     constantFields:[

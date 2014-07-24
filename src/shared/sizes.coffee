@@ -1,4 +1,6 @@
 module.exports = do ->
+  #list of iab sizes with their name
+  #todo: finish this list
   return (
     leaderboard:[728,90]
     "medium-rectangle":[300,250]

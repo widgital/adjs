@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>utils.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="slot.html">
+                slot.coffee
+              </a>
+            
+              
+              <a class="source" href="ad_request.html">
+                ad_request.coffee
+              </a>
+            
+              
+              <a class="source" href="advertiser.html">
+                advertiser.coffee
+              </a>
+            
+              
+              <a class="source" href="base.html">
+                base.coffee
+              </a>
+            
+              
+              <a class="source" href="config.html">
+                config.coffee
+              </a>
+            
+              
+              <a class="source" href="endpoint.html">
+                endpoint.coffee
+              </a>
+            
+              
+              <a class="source" href="engagement.html">
+                engagement.coffee
+              </a>
+            
+              
+              <a class="source" href="event.html">
+                event.coffee
+              </a>
+            
+              
+              <a class="source" href="page.html">
+                page.coffee
+              </a>
+            
+              
+              <a class="source" href="sizes.html">
+                sizes.coffee
+              </a>
+            
+              
+              <a class="source" href="utils.html">
+                utils.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>utils.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">window</span>.JSON <span class="hljs-keyword">or</span>= <span class="hljs-built_in">require</span> <span class="hljs-string">'json'</span>
+reqwest = <span class="hljs-built_in">require</span> <span class="hljs-string">'reqwest'</span>
+<span class="hljs-built_in">window</span>.JSON <span class="hljs-keyword">or</span>= <span class="hljs-built_in">require</span> <span class="hljs-string">'json'</span>
+
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-keyword">do</span> <span class="hljs-function"><span class="hljs-params">($sf)</span>-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Commonly used utilities throughout the application
+Also a few functions that proxy built in safeframe functions</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  reqId = <span class="hljs-number">0</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>uses reqwest - there is a bug in reqwest come up with our own jsonp callback. PR pending</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">sendRequest</span> = <span class="hljs-params">(options)</span>-&gt;</span>
+    reqId++
+    options.jsonpCallbackName = <span class="hljs-string">"adjs_<span class="hljs-subst">#{now()}</span>_<span class="hljs-subst">#{reqId}</span>"</span>  <span class="hljs-keyword">if</span> options.type==<span class="hljs-string">"jsonp"</span>
+    reqwest options</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>takes a query string and returns a js obj</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">fromQuery</span> = <span class="hljs-params">(query=<span class="hljs-string">""</span>,delim=<span class="hljs-string">"&amp;"</span>)</span>-&gt;</span>
+    params = {}
+    <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> query.split(delim)
+      [key,value] = item.split(<span class="hljs-string">"="</span>)
+      params[key] = decodeURIComponent(value)
+    params</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>returns a string from a javacsript object representing a query string - uses reqwest</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">toQuery</span> = <span class="hljs-params">(attributes)</span>-&gt;</span>
+    reqwest.toQueryString(attributes)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>attempts to turn a string into a number if it fails returns 0</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">toNumber</span> = <span class="hljs-params">(val)</span>-&gt;</span>
+    $sf?.lib.lang.cnum(val,<span class="hljs-number">0</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>returns the current unix time could just do (+ new Date())</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">now</span> = <span class="hljs-params">()</span>-&gt;</span>
+    (<span class="hljs-keyword">new</span> Date()).getTime()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>shim for Object.defineproperty</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">defineProperty</span> = <span class="hljs-params">(obj,prop,descriptor)</span>-&gt;</span>
+    <span class="hljs-keyword">try</span>
+      <span class="hljs-keyword">if</span> <span class="hljs-string">"defineProperty"</span> <span class="hljs-keyword">of</span> Object
+        Object.defineProperty(obj,prop,descriptor)
+      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-string">"__defineGetter__"</span> <span class="hljs-keyword">of</span> obj
+        <span class="hljs-keyword">if</span> descriptor.value
+          obj.__defineGetter__(prop,<span class="hljs-function">-&gt;</span> descriptor.value)
+          <span class="hljs-keyword">if</span> descriptor.writable != <span class="hljs-literal">false</span>
+            obj.__defineSetter__<span class="hljs-function"><span class="hljs-params">(prop,(val)-&gt;
+              val[prop] = val
+          )</span>
+        <span class="hljs-title">else</span>
+          <span class="hljs-title">obj</span>.<span class="hljs-title">__defineGetter__</span><span class="hljs-params">(prop,descriptor.get)</span> <span class="hljs-title">if</span> <span class="hljs-title">descriptor</span>.<span class="hljs-title">get</span>?
+          <span class="hljs-title">obj</span>.<span class="hljs-title">__defineSetter__</span><span class="hljs-params">(prop,descriptor.set)</span> <span class="hljs-title">if</span> <span class="hljs-title">descriptor</span>.<span class="hljs-title">set</span>?
+      <span class="hljs-title">else</span>
+        <span class="hljs-title">if</span> <span class="hljs-title">descriptor</span>.<span class="hljs-title">value</span>
+          <span class="hljs-title">obj</span>[<span class="hljs-title">prop</span>] = <span class="hljs-title">descriptor</span>.<span class="hljs-title">value</span>
+    <span class="hljs-title">catch</span> <span class="hljs-title">e</span>
+
+</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>counts number of child frames</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">countFrames</span> = <span class="hljs-params">(win)</span>-&gt;</span>
+    count = win.frames.length
+    <span class="hljs-keyword">for</span> frame <span class="hljs-keyword">in</span> win.frames
+      count += countFrames(frame) <span class="hljs-keyword">unless</span>  frame == win
+    count</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>gets the current frames position</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">getFramePosition</span> = <span class="hljs-params">(win)</span>-&gt;</span>
+    count = <span class="hljs-number">0</span>
+    count = <span class="hljs-number">1</span> + getFramePosition(win.parent) <span class="hljs-keyword">if</span> win.parent != win.top
+    count</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>taken from underscore</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  nativeReduce = <span class="hljs-attribute">Array</span>::reduce
+  reduceError = <span class="hljs-string">'Reduce of empty array with no initial value'</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>reduce function taken from underscore</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">reduce</span> = <span class="hljs-params">(obj, iterator, memo)</span> -&gt;</span>
+    initial = arguments.length &gt; <span class="hljs-number">2</span>
+    obj = []  <span class="hljs-keyword">unless</span> obj?
+    <span class="hljs-keyword">if</span> nativeReduce <span class="hljs-keyword">and</span> obj.reduce <span class="hljs-keyword">is</span> nativeReduce
+      <span class="hljs-keyword">return</span> (<span class="hljs-keyword">if</span> initial <span class="hljs-keyword">then</span> obj.reduce(iterator, memo) <span class="hljs-keyword">else</span> obj.reduce(iterator))
+    <span class="hljs-keyword">for</span> value,index <span class="hljs-keyword">in</span> obj
+      <span class="hljs-keyword">do</span> <span class="hljs-function"><span class="hljs-params">(value, index, obj)</span> -&gt;</span>
+        <span class="hljs-keyword">unless</span> initial
+          memo = value
+          initial = <span class="hljs-literal">true</span>
+        <span class="hljs-keyword">else</span>
+          memo = iterator.call(@, memo, value, index, obj)
+        <span class="hljs-keyword">return</span>
+
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> TypeError(reduceError)  <span class="hljs-keyword">unless</span> initial
+    memo</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>returns an objects keys</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">keys</span> = <span class="hljs-params">(obj)</span>-&gt;</span>
+    $sf?.lib.lang.keys(obj)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>searches the top window for a controller
+retries in case it hasn’t been loaded yet</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">findController</span> = <span class="hljs-params">(cb,retry=<span class="hljs-number">3</span>)</span>-&gt;</span>
+    controller = <span class="hljs-literal">null</span>
+    <span class="hljs-keyword">for</span> frame <span class="hljs-keyword">in</span> <span class="hljs-built_in">window</span>.top.frames
+      <span class="hljs-keyword">try</span>
+        <span class="hljs-keyword">if</span> frame.$ad?.isController
+          controller = frame.$ad
+          <span class="hljs-keyword">break</span>
+      <span class="hljs-keyword">catch</span>
+    <span class="hljs-keyword">if</span> controller
+      cb(controller)
+    <span class="hljs-keyword">else</span>
+      setTimeout((<span class="hljs-function">-&gt;</span>findController(cb,retry-<span class="hljs-number">1</span>)),<span class="hljs-number">100</span>) <span class="hljs-keyword">unless</span> retry&lt;<span class="hljs-number">0</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>makes the first characture uppercase of a given string</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">capitalizeString</span>  = <span class="hljs-params">(string)</span>-&gt;</span>
+    string.charAt(<span class="hljs-number">0</span>).toUpperCase() + string.slice(<span class="hljs-number">1</span>);
+
+  <span class="hljs-attribute">sendRequest</span>: sendRequest
+  <span class="hljs-attribute">toQuery</span>: toQuery
+  <span class="hljs-attribute">fromQuery</span>: fromQuery
+  <span class="hljs-attribute">toNumber</span>: toNumber
+  <span class="hljs-attribute">now</span>: now
+  <span class="hljs-attribute">defineProperty</span>: defineProperty
+  <span class="hljs-attribute">countFrames</span>: countFrames
+  <span class="hljs-attribute">capitalizeString</span>: capitalizeString
+  <span class="hljs-attribute">keys</span>: keys
+  <span class="hljs-attribute">getFramePosition</span>: getFramePosition
+  <span class="hljs-attribute">reduce</span>: reduce
+  <span class="hljs-attribute">findController</span>: findController</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

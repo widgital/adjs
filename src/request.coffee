@@ -1,10 +1,10 @@
 Base = require './shared/base'
-uuid = require 'node-uuid'
-
 
 module.exports = do (window)->
+  # Request object
+  # Just declares constant fields, identical to base
   class Request extends Base
-    constructor:(@clientId,@sessionId)->
+    constructor:()->
       super
     path:"/event"
     constantFields:[

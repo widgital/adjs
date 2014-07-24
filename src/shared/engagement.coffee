@@ -1,5 +1,7 @@
+#[Utils](./utils.html)
 utils = require './utils'
 module.exports = do (window,$sf)->
+  # this module attaches to every activity based event - when one occurs engagement is deemed to have occurred
   attach = $sf.lib.dom.attach
   engagement =
     isEngaged: false

@@ -1,5 +1,6 @@
 module.exports = (eventNames)->
   do ()->
+    #todo: replace homegrown events with eventemitter
     events =
       on:(event,cb)->
         @events or={}
@@ -7,9 +8,8 @@ module.exports = (eventNames)->
         eventList.push cb
         @events[event] = eventList
         @
-      ###
-        optionalData needs to be fixed
-      ###
+
+      #  optionalData needs to be fixed
       trigger:(event,data,optionalData)->
         @events or= {}
         for e in @events[event] or []
