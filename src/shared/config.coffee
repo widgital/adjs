@@ -18,6 +18,14 @@ module.exports = do ->
     domain:"adjs.net"
     controller_url:"//cdn.adjs.net/html/controllerframe.html"
     ad_url: "//cdn.adjs.net/html/adframe.html"
+  else if process.env.ENV == "staging"
+    api: "//api.adjs.net/1"
+    cdn_url: "//s3.amazonaws.com/js.adjsdemo.com/html/adjsframe.html"
+    visit_expiry: 30
+    version:"0.0.1"
+    domain:"s3.amazonaws.com"
+    controller_url:"//s3.amazonaws.com/js.adjsdemo.com/html/controllerframe.html"
+    ad_url: "//s3.amazonaws.com/js.adjsdemo.com/html/adframe.html"
   else
     api: '//endpoint.adjs.dev:8080/1'
     cdn_url: '../lib/html/adjsframe.html'
