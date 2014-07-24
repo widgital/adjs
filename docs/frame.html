@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>frame.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="adframe.html">
+                adframe.coffee
+              </a>
+            
+              
+              <a class="source" href="controller.html">
+                controller.coffee
+              </a>
+            
+              
+              <a class="source" href="frame.html">
+                frame.coffee
+              </a>
+            
+              
+              <a class="source" href="publisher.html">
+                publisher.coffee
+              </a>
+            
+              
+              <a class="source" href="slot.html">
+                slot.coffee
+              </a>
+            
+              
+              <a class="source" href="request.html">
+                request.coffee
+              </a>
+            
+              
+              <a class="source" href="ad_request.html">
+                ad_request.coffee
+              </a>
+            
+              
+              <a class="source" href="advertiser.html">
+                advertiser.coffee
+              </a>
+            
+              
+              <a class="source" href="base.html">
+                base.coffee
+              </a>
+            
+              
+              <a class="source" href="config.html">
+                config.coffee
+              </a>
+            
+              
+              <a class="source" href="endpoint.html">
+                endpoint.coffee
+              </a>
+            
+              
+              <a class="source" href="engagement.html">
+                engagement.coffee
+              </a>
+            
+              
+              <a class="source" href="event.html">
+                event.coffee
+              </a>
+            
+              
+              <a class="source" href="page.html">
+                page.coffee
+              </a>
+            
+              
+              <a class="source" href="sizes.html">
+                sizes.coffee
+              </a>
+            
+              
+              <a class="source" href="utils.html">
+                utils.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>frame.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>currentName = <span class="hljs-built_in">window</span>.name
+
+$sf = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../node_modules/safeframe/lib/js/ext/ext'</span>)(<span class="hljs-literal">true</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p><a href="./event.html">Events</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>events = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./shared/event'</span>)([<span class="hljs-string">"request"</span>,<span class="hljs-string">"load"</span>,<span class="hljs-string">"view"</span>,<span class="hljs-string">"click"</span>,<span class="hljs-string">"expanded"</span>,<span class="hljs-string">"collapsed"</span>,
+                                    <span class="hljs-string">"engage"</span>,<span class="hljs-string">"unview"</span>,<span class="hljs-string">"unload"</span>])</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p><a href="./utils.html">Utils</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>utils = <span class="hljs-built_in">require</span> <span class="hljs-string">'./shared/utils'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p><a href="./request.html">Request</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Request = <span class="hljs-built_in">require</span> <span class="hljs-string">'./request'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p><a href="./config.html">Config</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>config = <span class="hljs-built_in">require</span> <span class="hljs-string">'./shared/config'</span>
+
+<span class="hljs-keyword">do</span> <span class="hljs-function"><span class="hljs-params">($sf,<span class="hljs-built_in">window</span>)</span>-&gt;</span>
+
+  <span class="hljs-built_in">document</span>.domain = config.domain
+  controller = <span class="hljs-literal">null</span>
+  sfDom = $sf.lib.dom
+  AdJS = {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>protect this frame from being a controller as arbitrary scripts can be injected
+will make sense to inject a second domain with our scripts to fully control the controller domain</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  utils.defineProperty AdJS,<span class="hljs-string">"isController"</span>,
+    <span class="hljs-attribute">writable</span>:<span class="hljs-literal">false</span>
+    <span class="hljs-attribute">value</span>:<span class="hljs-literal">false</span>
+    <span class="hljs-attribute">configurable</span>:<span class="hljs-literal">false</span>
+
+
+  request = <span class="hljs-keyword">new</span> Request()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>set information that is immediately available about the ad load_pos should always be 1</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  request.set
+    <span class="hljs-attribute">load_pos</span>:utils.getFramePosition(<span class="hljs-built_in">window</span>)
+    <span class="hljs-attribute">v_js</span>:config.version
+    <span class="hljs-attribute">req_url_blind</span>: <span class="hljs-literal">true</span> <span class="hljs-comment">#todo this will not always be true</span>
+    <span class="hljs-attribute">tz</span>:(<span class="hljs-keyword">new</span> Date()).getTimezoneOffset()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>find the controller and send request when you get it</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  utils.findController <span class="hljs-function"><span class="hljs-params">(ctrl)</span>-&gt;</span>
+    controller = ctrl
+    request.change<span class="hljs-function"> -&gt;</span>
+      controller.send(request)
+    controller.send(request)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>ticks before we decide the slot has been viewed</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  VIEWED_STRIKE = <span class="hljs-number">9</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>running tally of ticks</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  viewedTicks = <span class="hljs-number">0</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>similar to viewed ticks but for being out of view</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  unviewedTicks = <span class="hljs-number">0</span>
+  width= <span class="hljs-built_in">window</span>.innerWidth
+  height= <span class="hljs-built_in">window</span>.innerHeight
+  registered = <span class="hljs-literal">false</span>
+  didShow = <span class="hljs-literal">false</span>
+  requested =<span class="hljs-literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>time of this script being loaded</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  startTicks = utils.now()
+  maxViewPercentage = <span class="hljs-number">0</span>
+  viewedPercentages = []
+
+  attributes = {}
+
+  AdJS.<span class="hljs-function"><span class="hljs-title">setDimensions</span> = <span class="hljs-params">(w,h)</span>-&gt;</span>
+    width = w
+    height = h</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>safeframe method for handling external events</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">registerForEvents</span> = <span class="hljs-params">()</span>-&gt;</span>
+    registered = <span class="hljs-literal">true</span>
+    $sf.ext.register width,height,onUpdate</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>experimental method to override doc.refferer this does not work in any safari browser</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">updateReferrer</span> = <span class="hljs-params">(level=<span class="hljs-string">"all"</span>)</span>-&gt;</span>
+    <span class="hljs-keyword">switch</span> level
+      <span class="hljs-keyword">when</span> <span class="hljs-string">"all"</span> <span class="hljs-keyword">then</span> <span class="hljs-literal">true</span>
+      <span class="hljs-keyword">when</span> <span class="hljs-string">"host"</span>
+        utils.defineProperty <span class="hljs-built_in">document</span>,<span class="hljs-string">"referrer"</span>,
+          <span class="hljs-attribute">get</span>:<span class="hljs-function">-&gt;</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-string">"<span class="hljs-subst">#{<span class="hljs-built_in">document</span>.location.protocol}</span>//<span class="hljs-subst">#{host}</span>"</span>
+        <span class="hljs-literal">true</span>
+      <span class="hljs-keyword">when</span> <span class="hljs-string">"none"</span> <span class="hljs-keyword">then</span> <span class="hljs-literal">false</span>
+      <span class="hljs-keyword">else</span> <span class="hljs-literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>manages updates from the publisher</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">onUpdate</span> = <span class="hljs-params">(status,data)</span>-&gt;</span>
+    <span class="hljs-keyword">switch</span> status
+      <span class="hljs-keyword">when</span> <span class="hljs-string">"expanded"</span> <span class="hljs-keyword">then</span>  <span class="hljs-function"><span class="hljs-params">()</span>-&gt;</span> AdJS.expanded()
+      <span class="hljs-keyword">when</span> <span class="hljs-string">"collapsed"</span> <span class="hljs-keyword">then</span>  <span class="hljs-function"><span class="hljs-params">()</span>-&gt;</span> AdJS.collapsed()
+      <span class="hljs-keyword">when</span> <span class="hljs-string">"geom-update"</span> <span class="hljs-keyword">then</span> showAd()
+      <span class="hljs-keyword">when</span> <span class="hljs-string">"engaged"</span> <span class="hljs-keyword">then</span> AdJS.engage()
+      <span class="hljs-keyword">when</span> <span class="hljs-string">"requested"</span> <span class="hljs-keyword">then</span> AdJS.request()  <span class="hljs-keyword">unless</span> requested
+
+  isViewedInterval =<span class="hljs-literal">null</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>handle viewbality in an interval as the ticks go up to VIEWED_STRIKE</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">updateIsViewed</span> = -&gt;</span>
+    viewPercent = $sf.ext.inViewPercentage?() <span class="hljs-keyword">or</span> <span class="hljs-number">0</span>
+    <span class="hljs-keyword">if</span> !AdJS.isViewed &amp;&amp; viewPercent &gt; <span class="hljs-number">50</span> &amp;&amp; $sf.ext.winHasFocus()
+      viewedTicks++
+      viewedPercentages.push(viewPercent)
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> AdJS.isViewed &amp;&amp;  (viewPercent &lt; <span class="hljs-number">50</span> || !$sf.ext.winHasFocus())
+      unviewedTicks++
+    <span class="hljs-keyword">else</span>
+      unviewedTicks = viewedTicks = <span class="hljs-number">0</span>
+      viewedPercentages = []
+    <span class="hljs-keyword">if</span> viewedTicks == VIEWED_STRIKE
+      AdJS.view() <span class="hljs-keyword">unless</span> AdJS.isViewed
+      AdJS.isViewed=<span class="hljs-literal">true</span>
+    <span class="hljs-keyword">if</span> unviewedTicks == VIEWED_STRIKE
+      AdJS.unview() <span class="hljs-keyword">unless</span> AdJS.isunViewed
+      AdJS.isunViewed = <span class="hljs-literal">true</span>
+      clearInterval(isViewedInterval)
+    maxViewPercentage = viewPercent <span class="hljs-keyword">if</span> viewPercent &gt; maxViewPercentage
+  showAdTimer = <span class="hljs-literal">null</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>display the ad if viewability is required show it in view otherwise just show it</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">showAd</span> = <span class="hljs-params">(show)</span>-&gt;</span>
+    <span class="hljs-keyword">if</span> ($sf.ext.inViewPercentage?() &gt; <span class="hljs-number">5</span> &amp;&amp; !didShow) <span class="hljs-keyword">or</span> show
+      clearInterval(showAdTimer) <span class="hljs-keyword">if</span> showAdTimer
+      startTime = utils.now()
+      AdJS.request()
+      $sf.ext.showAd <span class="hljs-literal">null</span>,<span class="hljs-function">-&gt;</span>
+        AdJS.load()
+      didShow=<span class="hljs-literal">true</span>
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">unless</span> showAdTimer || didShow
+      showAdTimer = setInterval(forceNuke,<span class="hljs-number">50</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>if its viewability only advertisement kill the frame and have publisher reload it once in view</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">forceNuke</span> = <span class="hljs-params">()</span>-&gt;</span>
+    <span class="hljs-keyword">if</span> ($sf.ext.inViewPercentage?() &gt; <span class="hljs-number">5</span> &amp;&amp; showAdTimer)
+      clearInterval(showAdTimer)
+      showAdTimer=<span class="hljs-literal">null</span>
+      $sf.ext.reload()
+
+  $sf.lib.lang.mix(AdJS,events)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>override default events to pass specific values -not sure this is required anymore</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  AdJS.<span class="hljs-function"><span class="hljs-title">on</span> = <span class="hljs-params">(event,cb)</span>-&gt;</span>
+    events.<span class="hljs-literal">on</span>.apply(@,[event,cb])</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>proxy functions so advertiser can call these methods from $ad.exand etc…</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  AdJS.<span class="hljs-function"><span class="hljs-title">expand</span> = <span class="hljs-params">(deltaXorDesc, deltaY, p)</span>-&gt;</span> $sf.ext.expand(deltaXorDesc,deltaY,p)
+  AdJS.<span class="hljs-function"><span class="hljs-title">collapse</span> = -&gt;</span> $sf.ext.collapse()
+  AdJS.<span class="hljs-function"><span class="hljs-title">cookie</span> = <span class="hljs-params">(cookieName,cookieData)</span>-&gt;</span> $sf.ext.cookie(coookieName,cookieData)
+  AdJS.<span class="hljs-function"><span class="hljs-title">supports</span> = <span class="hljs-params">(key)</span>-&gt;</span> $sf.ext.supports(key)
+  AdJS.<span class="hljs-function"><span class="hljs-title">sendMessage</span> = <span class="hljs-params">(content)</span>-&gt;</span>
+    setTimeout(<span class="hljs-function">-&gt;</span>
+      $sf.ext.message(encodeURIComponent(content))
+    ,<span class="hljs-number">1</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>handle click event in most cases this won’t work
+todo add this to ad script</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  sfDom.attach(<span class="hljs-built_in">document</span>.body,<span class="hljs-string">"mouseup"</span>,<span class="hljs-function">-&gt;</span>
+    AdJS.click()
+    <span class="hljs-literal">true</span>
+  )</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Register events that send to the parent
+the following events are available from the frame as an advertiser</p>
+<table>
+<thead>
+<tr>
+<th>event name</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> request</td>
+<td>occurs when the ad is requested</td>
+</tr>
+<tr>
+<td> click</td>
+<td>occurs when the ad is clicked</td>
+</tr>
+<tr>
+<td> load</td>
+<td>occurs when the ad has been loaded</td>
+</tr>
+<tr>
+<td> view</td>
+<td>Occurs when greater than 50% of the ad is in view for greater than 1 second</td>
+</tr>
+<tr>
+<td> unload</td>
+<td>Occurs when the ad is removed</td>
+</tr>
+<tr>
+<td> engage</td>
+<td>occurs when there is engagement and the view event has already fired</td>
+</tr>
+<tr>
+<td> unview</td>
+<td>occurs when a viewed ad leaves view</td>
+</tr>
+</tbody>
+</table>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  AdJS.click<span class="hljs-function"> -&gt;</span>
+    $sf.ext.click()
+
+  AdJS.view<span class="hljs-function">  -&gt;</span>
+    $sf.ext.viewed()
+
+  AdJS.unview<span class="hljs-function"> -&gt;</span>
+    $sf.ext.unviewed()
+
+  AdJS.load<span class="hljs-function"> -&gt;</span>
+    registerForEvents()
+
+  AdJS.load<span class="hljs-function"> -&gt;</span>
+    isViewedInterval = setInterval(updateIsViewed,<span class="hljs-number">100</span>)
+
+  AdJS.load<span class="hljs-function"> -&gt;</span>
+    AdJS.loadChain = utils.countFrames(<span class="hljs-built_in">window</span>)
+    request.set(<span class="hljs-attribute">load_chain</span>:AdJS.loadChain)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>set request specific data on request of the ad including geometry information</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  AdJS.request<span class="hljs-function"> -&gt;</span>
+    AdJS.requestTime = utils.now()
+    geoInfo = $sf.ext.geom()
+    request.set
+      <span class="hljs-attribute">requested</span>:<span class="hljs-literal">true</span>
+      <span class="hljs-attribute">requestedAt</span>:utils.now()
+      <span class="hljs-attribute">req_t</span>:utils.now() - startTicks
+      <span class="hljs-attribute">req_view_pct</span>: $sf.ext.inViewPercentage?()
+      <span class="hljs-attribute">slot_x</span>: geoInfo.self.l
+      <span class="hljs-attribute">slot_y</span>: geoInfo.self.t
+      <span class="hljs-attribute">slot_w</span>:geoInfo.self.w
+      <span class="hljs-attribute">slot_h</span>:geoInfo.self.h
+      <span class="hljs-attribute">screen_w</span>:<span class="hljs-built_in">window</span>.screen.width
+      <span class="hljs-attribute">screen_h</span>:<span class="hljs-built_in">window</span>.screen.height
+      <span class="hljs-attribute">vp_x</span>:geoInfo.win.l
+      <span class="hljs-attribute">vp_y</span>:geoInfo.win.t
+      <span class="hljs-attribute">vp_w</span>:geoInfo.win.w
+      <span class="hljs-attribute">vp_h</span>:geoInfo.win.h</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>begin the timeline of events as they occur</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  AdJS.load<span class="hljs-function"> -&gt;</span>
+    AdJS.loadTime = utils.now()
+    sfDom.attach <span class="hljs-built_in">window</span>,<span class="hljs-string">"unload"</span>,<span class="hljs-function">-&gt;</span>
+      AdJS.unload()
+    request.set
+      <span class="hljs-attribute">loaded</span>:<span class="hljs-literal">true</span>
+      <span class="hljs-attribute">loadedAt</span>:utils.now()
+      <span class="hljs-attribute">load_t</span>:utils.now() - startTicks
+
+
+  AdJS.view<span class="hljs-function"> -&gt;</span>
+    AdJS.viewTime = utils.now()
+    request.set
+      <span class="hljs-attribute">viewed</span>:<span class="hljs-literal">true</span>
+      <span class="hljs-attribute">viewedAt</span>:utils.now()
+      <span class="hljs-attribute">view_t</span>: utils.now() - startTicks
+      <span class="hljs-attribute">view_meas</span>:<span class="hljs-literal">true</span> <span class="hljs-comment">#todo change this to start of request - although alls hould be measurable with js</span>
+      <span class="hljs-attribute">view_pct</span>: utils.reduce<span class="hljs-function"><span class="hljs-params">(viewedPercentages,((memo,num)-&gt; memo + num),<span class="hljs-number">0</span>)</span>/<span class="hljs-title">viewedPercentages</span>.<span class="hljs-title">length</span>
+      <span class="hljs-title">view_pct_max</span>: <span class="hljs-title">maxViewPercentage</span>
+
+  <span class="hljs-title">AdJS</span>.<span class="hljs-title">engage</span> -&gt;</span>
+    AdJS.engageTime = utils.now()
+    request.set
+      <span class="hljs-attribute">engaged</span>:<span class="hljs-literal">true</span>
+      <span class="hljs-attribute">view_eng</span>:<span class="hljs-literal">true</span>
+      <span class="hljs-attribute">engagedAt</span>:utils.now()
+
+
+  AdJS.click<span class="hljs-function"> -&gt;</span>
+    AdJS.clickTime = utils.now()
+    request.set
+      <span class="hljs-attribute">clicked</span>:<span class="hljs-literal">true</span>
+      <span class="hljs-attribute">clickedAt</span>:utils.now()
+      <span class="hljs-attribute">clk_t</span>: utils.now() - startTicks
+
+  AdJS.unview<span class="hljs-function"> -&gt;</span>
+    AdJS.unviewTime = utils.now()
+    request.set
+      <span class="hljs-attribute">unviewed</span>:<span class="hljs-literal">true</span>
+      <span class="hljs-attribute">unviewedAt</span>:utils.now()
+      <span class="hljs-attribute">view_dur</span>: utils.now() - AdJS.viewedAt
+      <span class="hljs-attribute">view_pct_max</span>: maxViewPercentage
+
+  AdJS.unload<span class="hljs-function"> -&gt;</span>
+    AdJS.unloadTime = utils.now()
+    request.set
+      <span class="hljs-attribute">unloaded</span>:<span class="hljs-literal">true</span>
+      <span class="hljs-attribute">unloadedAt</span>:utils.now()
+      <span class="hljs-attribute">unl_t</span>: utils.now() - startTicks
+
+  $sf.ext.render(<span class="hljs-literal">false</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>handle and set data from the parent</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  didShow = <span class="hljs-keyword">not</span> $sf.lib.lang.cbool($sf.ext.meta(<span class="hljs-string">"inview"</span>,<span class="hljs-string">"extended"</span>))
+  referrerLevel = $sf.ext.meta(<span class="hljs-string">"referrer"</span>,<span class="hljs-string">"extended"</span>) <span class="hljs-keyword">or</span> <span class="hljs-string">"all"</span>
+  host = $sf.ext.meta(<span class="hljs-string">"host"</span>,<span class="hljs-string">"extended"</span>)
+  $sf.ext.deleteMeta(<span class="hljs-string">"host"</span>,<span class="hljs-string">"extended"</span>)
+  location = $sf.ext.meta(<span class="hljs-string">"location"</span>,<span class="hljs-string">"extended"</span>)
+  $sf.ext.deleteMeta(<span class="hljs-string">"location"</span>,<span class="hljs-string">"extended"</span>)
+  AdJS.slotId = $sf.ext.meta(<span class="hljs-string">"slot_id"</span>,<span class="hljs-string">"extended"</span>)
+  AdJS.count =  $sf.ext.meta(<span class="hljs-string">"load_n"</span>,<span class="hljs-string">"extended"</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>set the data on the request as neccasary</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  request.set
+    <span class="hljs-attribute">slot_id</span>:  $sf.ext.meta(<span class="hljs-string">"slot_id"</span>,<span class="hljs-string">"extended"</span>)
+    <span class="hljs-attribute">load_n</span>: $sf.ext.meta(<span class="hljs-string">"load_n"</span>,<span class="hljs-string">"extended"</span>),
+    <span class="hljs-attribute">page_url</span>: location
+    <span class="hljs-attribute">page_host</span>: host
+    {<span class="hljs-attribute">silent</span>:<span class="hljs-literal">true</span>}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>if referrer is hiddent redirect to self or show the page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  showPage = <span class="hljs-built_in">document</span>.location.href == <span class="hljs-built_in">document</span>.referrer <span class="hljs-keyword">or</span> updateReferrer(referrerLevel)
+  <span class="hljs-keyword">if</span> showPage
+    showAd(didShow)
+  <span class="hljs-keyword">else</span>
+    <span class="hljs-built_in">window</span>.name = currentName
+    <span class="hljs-built_in">document</span>.location = <span class="hljs-built_in">document</span>.location</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>ad frame must be a child or equal in order to take it seriously</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">confirmChild</span> = <span class="hljs-params">(win,adFrame)</span>-&gt;</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span> <span class="hljs-keyword">if</span> win==adFrame
+    <span class="hljs-keyword">return</span> (childFrame <span class="hljs-keyword">for</span> childFrame <span class="hljs-keyword">in</span> win.frames <span class="hljs-keyword">when</span> confirmChild(childFrame,adFrame)).length &gt; <span class="hljs-number">0</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>reads the ad</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">readAd</span> = <span class="hljs-params">(adFrame)</span>-&gt;</span>
+    <span class="hljs-keyword">if</span> confirmChild(<span class="hljs-built_in">window</span>,adFrame)
+      controller.combine(request,adFrame.getDetails())</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>lock down $ad</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  utils.defineProperty <span class="hljs-built_in">window</span>,<span class="hljs-string">"$ad"</span>,
+    <span class="hljs-attribute">writable</span>:<span class="hljs-literal">false</span>
+    <span class="hljs-attribute">value</span>:AdJS
+    <span class="hljs-attribute">configurable</span>:<span class="hljs-literal">false</span>
+  utils.defineProperty AdJS,<span class="hljs-string">"readAd"</span>,
+    <span class="hljs-attribute">writable</span>:<span class="hljs-literal">false</span>
+    <span class="hljs-attribute">value</span>:readAd
+    <span class="hljs-attribute">configurable</span>:<span class="hljs-literal">false</span>
+
+  AdJS</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
