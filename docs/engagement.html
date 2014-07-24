@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>engagement.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="slot.html">
+                slot.coffee
+              </a>
+            
+              
+              <a class="source" href="ad_request.html">
+                ad_request.coffee
+              </a>
+            
+              
+              <a class="source" href="advertiser.html">
+                advertiser.coffee
+              </a>
+            
+              
+              <a class="source" href="base.html">
+                base.coffee
+              </a>
+            
+              
+              <a class="source" href="config.html">
+                config.coffee
+              </a>
+            
+              
+              <a class="source" href="endpoint.html">
+                endpoint.coffee
+              </a>
+            
+              
+              <a class="source" href="engagement.html">
+                engagement.coffee
+              </a>
+            
+              
+              <a class="source" href="event.html">
+                event.coffee
+              </a>
+            
+              
+              <a class="source" href="page.html">
+                page.coffee
+              </a>
+            
+              
+              <a class="source" href="sizes.html">
+                sizes.coffee
+              </a>
+            
+              
+              <a class="source" href="utils.html">
+                utils.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>engagement.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p><a href="./utils.html">Utils</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>utils = <span class="hljs-built_in">require</span> <span class="hljs-string">'./utils'</span>
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-keyword">do</span> <span class="hljs-function"><span class="hljs-params">(<span class="hljs-built_in">window</span>,$sf)</span>-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>this module attaches to every activity based event - when one occurs engagement is deemed to have occurred</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  attach = $sf.lib.dom.attach
+  engagement =
+    <span class="hljs-attribute">isEngaged</span>: <span class="hljs-literal">false</span>
+  doc = <span class="hljs-built_in">window</span>.<span class="hljs-built_in">document</span>
+  engageEvents = []
+  disengageEvents = []
+  ENGAGEMENT_RESET = <span class="hljs-number">3000</span>
+  lastEngaged = <span class="hljs-literal">undefined</span>
+
+  engagement.<span class="hljs-function"><span class="hljs-title">onEngagement</span> = <span class="hljs-params">(f)</span>-&gt;</span>
+    engageEvents.push f
+
+  engagement.<span class="hljs-function"><span class="hljs-title">onDisengagement</span> = <span class="hljs-params">(f)</span>-&gt;</span>
+    disengageEvents.push f
+
+  <span class="hljs-function"><span class="hljs-title">activityHandler</span> = -&gt;</span>
+    engagement.isEngaged = <span class="hljs-literal">true</span>
+    engagement.lastEngaged = utils.now()
+    f() <span class="hljs-keyword">for</span> f <span class="hljs-keyword">in</span> engageEvents
+    resetEngagement()
+    <span class="hljs-literal">true</span>
+
+  engagementTimeout = <span class="hljs-literal">null</span>
+  <span class="hljs-function"><span class="hljs-title">resetEngagement</span> = -&gt;</span>
+    clearTimeout(engagementTimeout)
+    engagementTimeout = setTimeout(<span class="hljs-function">-&gt;</span>
+      engagement.isEngaged = <span class="hljs-literal">false</span>
+      f() <span class="hljs-keyword">for</span> f <span class="hljs-keyword">in</span> disengageEvents
+      disengageEvents=[]
+    ,ENGAGEMENT_RESET)
+
+  attach(doc,<span class="hljs-string">'click'</span>,activityHandler)
+  attach(doc,<span class="hljs-string">'mouseup'</span>,activityHandler)
+  attach(doc,<span class="hljs-string">'mousedown'</span>,activityHandler)
+  attach(doc,<span class="hljs-string">'mousemove'</span>,activityHandler)
+  attach(doc,<span class="hljs-string">'mousewheel'</span>,activityHandler)
+  attach(doc,<span class="hljs-string">'keypress'</span>,activityHandler)
+  attach(doc,<span class="hljs-string">'keydown'</span>,activityHandler)
+  attach(doc,<span class="hljs-string">'keyup'</span>,activityHandler)
+  attach(<span class="hljs-built_in">window</span>,<span class="hljs-string">'DOMMouseScroll'</span>,activityHandler)
+  attach(<span class="hljs-built_in">window</span>,<span class="hljs-string">'scroll'</span>,activityHandler)
+  attach(<span class="hljs-built_in">window</span>,<span class="hljs-string">'resize'</span>,activityHandler)
+  attach(<span class="hljs-built_in">window</span>,<span class="hljs-string">'focus'</span>,activityHandler)
+  attach(<span class="hljs-built_in">window</span>,<span class="hljs-string">'blur'</span>,activityHandler)
+
+  <span class="hljs-keyword">return</span> engagement</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
