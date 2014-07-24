@@ -14,10 +14,11 @@ module.exports = do (window)->
       configurable:false
 
     endpoint.send adRequest,->
-      pubFrame.$ad.readAd(window)
-      utils.findController (ctrl)->
-        controller = ctrl
-        adRequest.change ->
-          controller.send(adRequest)
+      if pubFrame
+        pubFrame.$ad.readAd(window)
+        utils.findController (ctrl)->
+          controller = ctrl
+          adRequest.change ->
+            controller.send(adRequest)
 
   work:work

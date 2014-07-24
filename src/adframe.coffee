@@ -42,7 +42,7 @@ do ($sf,window)->
         if win.$ad
           [win,myDepth]
       catch
-        null
+        []
     else
       findParent(win.parent,myDepth+1)
 
