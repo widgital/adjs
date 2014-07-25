@@ -83,7 +83,7 @@ task 'upload', 'upload files to s3',->
       fs.readFile "./lib/dist/html/#{f}", (err,body)->
         s3.putObject
           Bucket: process.env.S3_BUCKET || "cdn.adjs.net"
-          Key: "html#{f}"
+          Key: "html/#{f}"
           Body: body
           ContentType: "text/html"
           ACL: "public-read"
