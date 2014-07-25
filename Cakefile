@@ -1,5 +1,14 @@
 {print} = require 'util'
 {spawn} = require 'child_process'
+fs = require 'fs'
+
+AWS = require 'aws-sdk'
+AWS.config.update
+  accessKeyId: process.env.AMAZON_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AMAZON_SECRET_ACCESS_KEY
+  region: process.env.AMAZON_REGION or "us-east-1"
+
+
 
 task 'build', 'Build lib/ from src/', ->
   coffee = spawn 'coffee', ['-c', '-o', 'lib', 'src']
@@ -53,11 +62,34 @@ task 'minify', 'minify different files',->
       process.stderr.write data.toString()
     p.stdout.on 'data', (data) ->
       print data.toString()
-
-
-task 'upload', 'upload scripts to ec2',->
-
-
+task 'upload', 'upload files to s3',->
+  s3 = new AWS.S3()
+  jsFiles = fs.readdirSync("./lib/dist/").filter (f)-> f.match(/[.]js$/)
+  for f in jsFiles
+    do (f)->
+      fs.readFile "./lib/dist/#{f}", (err,body)->
+        s3.putObject
+          Bucket: process.env.S3_BUCKET || "cdn.adjs.net"
+          Key: f
+          Body: body
+          ContentType: "application/javascript"
+          ACL: "public-read"
+        ,(err,data)->
+          console.log(err, err.stack) if err
+          console.log(data) unless err
+  htmlFiles = fs.readdirSync("./lib/dist/html").filter (f)-> f.match(/[.]html$/)
+  for f in htmlFiles
+    do (f)->
+      fs.readFile "./lib/dist/html/#{f}", (err,body)->
+        s3.putObject
+          Bucket: process.env.S3_BUCKET || "cdn.adjs.net"
+          Key: "html#{f}"
+          Body: body
+          ContentType: "text/html"
+          ACL: "public-read"
+        ,(err,data)->
+          console.log(err, err.stack) if err
+          console.log(data) unless err
 
 task 'test', 'Run tests', ->
   mocha = spawn 'mocha', ['--compilers', 'coffee:coffee-script']
