@@ -17,6 +17,19 @@ module.exports = do (window)->
           ref:window.document.referrer
           v_js:config.version
         ,silent:true
+    serializedAttributes:()->
+      outAttrs = {}
+      for k,v of @attributes
+        outAttrs[k] = v
+      outAttrs.url = encodeURIComponent(outAttrs.url)
+      outAttrs.ref = encodeURIComponent(outAttrs.ref)
+      outAttrs
+    deserialize:(params)->
+      super(params)
+      @set
+        url:decodeURIComponent(@attributes.url)
+        ref:decodeURIComponent(@attributes.ref)
+      ,silent:true
     path:"/ad"
     constantFields:[
       "site_user_id"

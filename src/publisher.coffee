@@ -83,7 +83,7 @@ do (window)->
       height:10
       supports:["write-cookie","read-cookie"]
       renderFile: controllerUrl
-      page: sessionObj.serialize()
+      page: sessionObj.serializedAttributes()
       pageReferrer: document.referrer
       ignoreEvents:  true
 

@@ -67,6 +67,21 @@ module.exports = do ($sf,window)->
     verifyUrl:->
       if  window.parent==window.top && window.document.referrer #this shouldnt be neccasary but whatevs
         true #some of this should be done on the serer
+    #helper function to serialize attributes that break on paramshash
+    serializedAttributes:()->
+      outAttrs = {}
+      for k,v of @attributes
+        outAttrs[k] = v
+      outAttrs.url = encodeURIComponent(outAttrs.url)
+      outAttrs.ref = encodeURIComponent(outAttrs.ref)
+      outAttrs
+    deserialize:(params)->
+      super(params)
+      @set
+        url:decodeURIComponent(@attributes.url)
+        ref:decodeURIComponent(@attributes.ref)
+      ,silent:true
+
     path:"/page"
     constantFields:[
       "site_user_id",

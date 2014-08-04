@@ -65,7 +65,7 @@ do (window)->
       width:10
       height:10
       renderFile: adframeUrl
-      page: sessionObj.serialize()
+      page: sessionObj.serializedAttributes()
       pageReferrer: document.referrer
       ignoreEvents:  true
 
