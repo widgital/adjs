@@ -28,9 +28,9 @@ module.exports = do ->
     ad_url: "//s3.amazonaws.com/js.adjsdemo.com/html/adframe.html"
   else
     api: '//endpoint.adjs.dev:8080/1'
-    cdn_url: '../lib/html/adjsframe.html'
+    cdn_url: 'http://cdn.adjs.dev:9080/html/adjsframe.html'
     visit_expiry: 3
     version:"0.0.1"
-    domain:"localhost"
-    controller_url: "../lib/html/controllerframe.html"
-    ad_url:  "../lib/html/adframe.html"
+    domain:"adjs.dev"
+    controller_url: "http://cdn.adjs.dev:9080/html/controllerframe.html"
+    ad_url:  "http://cdn.adjs.dev:9080/html/adframe.html"

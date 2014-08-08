@@ -30,6 +30,8 @@ module.exports = do ($sf,window)->
           {value:@attributes.site_user_id,expires:moment().add("years",1).toDate()}) if @attributes.site_user_id
         $sf.ext.cookie("#{COOKIE_KEY}_vid",
           {value:@attributes.visit_id,expires:moment().add("seconds",config.visit_expiry*60).toDate()}) if @attributes.visit_id
+        #set a local cookie to see if it works on the backend
+        cookies.set("#{COOKIE_KEY}_enabled","true",domain: window.document.domain)
       else
         cookies.set("#{COOKIE_KEY}_suid" ,
           @attributes.site_user_id, { expires:moment().add("years",1).toDate()   }) if @attributes.site_user_id #one year
@@ -53,16 +55,16 @@ module.exports = do ($sf,window)->
       @storeCookie()
     #grap the url info if on the top
     initDefaultAttributes:->
-      if window==window.top
-        @set
-          url:window.document.location.href
-          ref:window.document.referrer
-          v_js:config.version
-        ,silent:true
+     attrs = if window==window.top
+        url:window.document.location.href
+        ref:window.document.referrer
       else if window.parent==window.top
-        @set
-          url:window.document.referrer
-          v_js:config.version
+        url:window.document.referrer
+     attrs.v_js = config.version
+     attrs.tz = (new Date()).getTimezoneOffset()
+     @set attrs,silent:true
+
+
     #todo: properly verify the url if not top
     verifyUrl:->
       if  window.parent==window.top && window.document.referrer #this shouldnt be neccasary but whatevs
